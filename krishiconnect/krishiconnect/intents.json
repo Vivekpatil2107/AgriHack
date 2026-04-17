@@ -1,0 +1,555 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Hey",
+        "Good morning",
+        "Good evening",
+        "Is anyone there?",
+        "Namaste"
+      ],
+      "responses": [
+        "Hello! Welcome to Krushi Connect. How can I help you today?",
+        "Hi there! I'm your Krushi Connect assistant. What do you need help with?",
+        "Namaste! How can I assist you with your farming or shopping needs today?"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye",
+        "See you later",
+        "Goodbye",
+        "Thanks, bye",
+        "Exit"
+      ],
+      "responses": [
+        "Goodbye! Have a great day and happy farming!",
+        "See you later! Feel free to ask if you need anything else.",
+        "Bye! Thanks for using Krushi Connect."
+      ]
+    },
+    {
+      "tag": "disease_prediction",
+      "patterns": [
+        "My plant is sick",
+        "Leaf has brown spots",
+        "How to use disease predictor",
+        "Check crop health",
+        "Yellow leaves what to do",
+        "Upload plant photo",
+        "Why is my crop dying?",
+        "Identify plant disease"
+      ],
+      "responses": [
+        "You can use our AI Plant Disease Predictor to find out! Go to your Farmer Dashboard, click 'Disease Prediction', and upload a clear photo of the affected leaf. The AI will identify the plant, detect any diseases, and provide treatment advice."
+      ]
+    },
+    {
+      "tag": "mandi_prices",
+      "patterns": [
+        "What is the price of onion?",
+        "Check mandi rates",
+        "Current market price",
+        "How much is wheat selling for?",
+        "Bhav kya hai",
+        "Market prices today",
+        "Where to check commodity rates?"
+      ],
+      "responses": [
+        "You can check real-time market rates directly on the platform. Go to your dashboard and click on 'Market Prices'. Enter your city and the commodity (like 'Onion' or 'Wheat') to see the current estimated maximum, minimum, and average prices."
+      ]
+    },
+    {
+      "tag": "password_reset",
+      "patterns": [
+        "How do I reset my password?",
+        "I forgot my password",
+        "Forgot password",
+        "Reset password",
+        "Help me reset my password",
+        "I can't log in to my account",
+        "Lost my login details"
+      ],
+      "responses": [
+        "Don't worry! Go to the Login page and click 'Forgot Password?'. Enter your registered email address, and we will send you a 6-digit OTP to verify your identity before letting you set a new password."
+      ]
+    },
+    {
+      "tag": "otp_issues",
+      "patterns": [
+        "I didn't get the OTP",
+        "OTP expired",
+        "Resend code",
+        "Verification failed",
+        "OTP timer ran out",
+        "Email verification not working"
+      ],
+      "responses": [
+        "For security, our OTPs are only valid for 10 minutes. If your timer ran out or you didn't receive the email, just click the 'Resend OTP' button on the verification page. (Also, double-check your spam folder just in case!)"
+      ]
+    },
+    {
+      "tag": "delivery_otp_explanation",
+      "patterns": [
+        "How does delivery work?",
+        "What is the delivery OTP?",
+        "Confirming delivery",
+        "How does the farmer know I got my order?",
+        "Mark order as delivered"
+      ],
+      "responses": [
+        "When a farmer ships an order, a 6-digit 'Delivery OTP' is generated. As a consumer, you will give this code to the farmer ONLY when you physically receive your products. The farmer enters this code in their dashboard to complete the sale securely."
+      ]
+    },
+    {
+      "tag": "cart_constraint",
+      "patterns": [
+        "Can't add to cart",
+        "Why do I need to clear my cart?",
+        "Buying from multiple farmers",
+        "Cart error",
+        "Cannot add product"
+      ],
+      "responses": [
+        "To keep delivery fast and simple, KrishiConnect allows you to buy from only one farmer at a time per order. If you want to buy from a different farmer, you must complete your current checkout or clear your cart first."
+      ]
+    },
+    {
+      "tag": "translation_features",
+      "patterns": [
+        "Read schemes in Hindi",
+        "Translate to Marathi",
+        "Government schemes language",
+        "How to change language?",
+        "Hindi translation"
+      ],
+      "responses": [
+        "We support local languages! On the 'Government Schemes' page, use the dropdown menu at the top to select Hindi or Marathi, then click 'Translate'. You can also translate Market Prices and Disease Prediction results in the same way."
+      ]
+    },
+    {
+      "tag": "razorpay_refunds",
+      "patterns": [
+        "How do refunds work?",
+        "Cancel online payment",
+        "Will I get my money back?",
+        "Razorpay refund"
+      ],
+      "responses": [
+        "If you cancel an order that is in 'Pending' or 'Processing' status, and you paid online via Razorpay, our system automatically initiates a full refund to your original payment method."
+      ]
+    },
+    {
+      "tag": "soil_health",
+      "patterns": [
+        "How to improve soil quality?",
+        "Best fertilizer for soil",
+        "Testing soil",
+        "Increase soil fertility",
+        "Compost vs chemical fertilizer"
+      ],
+      "responses": [
+        "Healthy soil is the foundation of good farming. We recommend getting a soil test every 2-3 years. To naturally improve fertility, consider crop rotation, planting cover crops (like legumes), and mixing organic compost into your fields."
+      ]
+    },
+    {
+      "tag": "pest_control",
+      "patterns": [
+        "How to get rid of insects?",
+        "Organic pest control",
+        "Bugs are eating my crops",
+        "Pesticide advice",
+        "Save crops from pests"
+      ],
+      "responses": [
+        "For mild pest issues, consider organic solutions like Neem oil sprays or introducing beneficial insects like ladybugs. If the infestation is severe, use our Disease Predictor tool by uploading a photo of the damage, or consult your local Krishi Vigyan Kendra (KVK)."
+      ]
+    },
+    {
+      "tag": "weather_advice",
+      "patterns": [
+        "Should I water my plants today?",
+        "Rain forecast",
+        "Check weather",
+        "Is it going to rain?",
+        "Weather update for farmers"
+      ],
+      "responses": [
+        "Before you irrigate, check the forecast! Go to your Farmer Dashboard and click 'Weather Info'. We provide a 5-day forecast powered by AccuWeather so you can plan your watering and harvesting schedule perfectly."
+      ]
+    },
+    {
+      "tag": "update_profile",
+      "patterns": [
+        "How do I change my city?",
+        "Update my address",
+        "Change profile picture",
+        "Edit my profile",
+        "Wrong phone number",
+        "Update account details"
+      ],
+      "responses": [
+        "You can update your details anytime! Go to your Dashboard and click on 'Update Profile'. From there, you can change your city, address, phone number, and upload a new profile picture. Remember, your city is used to match consumers with local farmers!"
+      ]
+    },
+    {
+      "tag": "platform_info",
+      "patterns": [
+        "What is KrishiConnect?",
+        "How does this website work?",
+        "About Krishi Connect",
+        "What can I do here?",
+        "Explain this app"
+      ],
+      "responses": [
+        "KrishiConnect is a 'farm-to-fork' platform. We bridge the gap between local farmers and consumers. Farmers can sell fresh produce directly, check market prices, and use AI to detect plant diseases. Consumers can buy fresh, local food and directly support the farmers in their city."
+      ]
+    },
+    {
+      "tag": "cost_pricing",
+      "patterns": [
+        "Is this free?",
+        "Do I have to pay to use this?",
+        "Platform fees",
+        "Does it cost money to sign up?",
+        "Commission charges"
+      ],
+      "responses": [
+        "Signing up and using KrishiConnect is completely free for both farmers and consumers! Consumers only pay for the products they purchase, and farmers keep their earnings."
+      ]
+    },
+    {
+      "tag": "add_product",
+      "patterns": [
+        "How to sell my crops?",
+        "Add a new product",
+        "List vegetables for sale",
+        "Upload my harvest",
+        "How do I put items on the market?",
+        "Selling process"
+      ],
+      "responses": [
+        "To list your produce, go to your Farmer Dashboard and locate the 'Add Product' form. You'll need to select a category (like Vegetables, Fruits, or Grains), set your price and quantity, add a description, and upload a nice photo of your harvest."
+      ]
+    },
+    {
+      "tag": "manage_orders_farmer",
+      "patterns": [
+        "How do I process an order?",
+        "Someone bought my crops, what now?",
+        "Order steps for farmers",
+        "How to ship",
+        "Accept an order"
+      ],
+      "responses": [
+        "When you get a new order, go to your Dashboard. First, click 'Accept'. When you are ready to send it, click 'Ship'. To finish the sale, you must ask the consumer for their 6-digit Delivery OTP when they receive the goods, and enter it into the 'Deliver' modal."
+      ]
+    },
+    {
+      "tag": "sales_report",
+      "patterns": [
+        "How much money did I make?",
+        "Download my sales",
+        "Get a receipt of my business",
+        "Sales history CSV",
+        "Check my income",
+        "Export orders"
+      ],
+      "responses": [
+        "You can track all your earnings in the 'Sales History' page from your dashboard. If you need it for your records, click the 'Export to CSV' button to download a spreadsheet of all your transactions within your chosen date range."
+      ]
+    },
+    {
+      "tag": "broadcast_message",
+      "patterns": [
+        "How to message my followers?",
+        "Tell customers about new stock",
+        "Send a broadcast",
+        "Alert consumers"
+      ],
+      "responses": [
+        "You can send updates directly to people who follow you! Go to the 'My Followers' page and use the Broadcast feature to send a notification to all your loyal customers at once (e.g., 'Fresh mangoes available tomorrow!')."
+      ]
+    },
+    {
+      "tag": "leave_review",
+      "patterns": [
+        "How to rate a farmer?",
+        "Leave a review",
+        "Give 5 stars",
+        "Product rating",
+        "Where do I write feedback?"
+      ],
+      "responses": [
+        "Once a farmer has successfully delivered your order and marked it complete, go to your 'Order History'. You will see an option to leave a star rating and a written review for the products you purchased."
+      ]
+    },
+    {
+      "tag": "contact_farmer",
+      "patterns": [
+        "How to talk to the farmer?",
+        "Ask the seller a question",
+        "Message a farmer",
+        "Contact seller"
+      ],
+      "responses": [
+        "If you have a question about a product, click on the Farmer's name to view their profile. There, you will find a 'Message Farmer' button. They will receive your message in their dashboard notifications and can reply directly to you."
+      ]
+    },
+    {
+      "tag": "find_local_food",
+      "patterns": [
+        "Why can't I see products from Mumbai?",
+        "How does the city filter work?",
+        "Local farmers only",
+        "Change location for shopping"
+      ],
+      "responses": [
+        "To ensure food stays fresh and delivery is fast, your Consumer Dashboard automatically filters the market to only show products from farmers in your registered city. If you move, simply update the 'City' field in your Profile!"
+      ]
+    },
+    {
+      "tag": "crop_rotation",
+      "patterns": [
+        "What is crop rotation?",
+        "Should I plant the same crop?",
+        "How to rotate crops",
+        "Soil depletion"
+      ],
+      "responses": [
+        "Crop rotation is the practice of planting different types of crops in the same area across a sequence of seasons. It helps reduce soil erosion, increases soil fertility, and naturally breaks the cycle of pests and diseases. For example, planting nitrogen-fixing legumes (like beans) after a heavy feeder like corn."
+      ]
+    },
+    {
+      "tag": "irrigation_tips",
+      "patterns": [
+        "Best way to water plants",
+        "Drip irrigation",
+        "Save water farming",
+        "When should I water my crops?"
+      ],
+      "responses": [
+        "The most efficient watering method is 'Drip Irrigation', which delivers water directly to the plant's roots, reducing evaporation. Generally, it's best to water early in the morning or late in the evening. Don't forget to check the 'Weather Info' tab on your dashboard to see if rain is coming before you irrigate!"
+      ]
+    },
+    {
+      "tag": "organic_farming",
+      "patterns": [
+        "How to start organic farming?",
+        "Chemical free farming",
+        "Natural fertilizers",
+        "Transition to organic"
+      ],
+      "responses": [
+        "Starting organic farming means replacing synthetic chemicals with natural alternatives. Begin by building healthy soil using compost, cow dung (FYM), and green manure. Use neem-based sprays for pest control. It takes time for the soil to recover, but your produce will eventually command a higher market price!"
+      ]
+    },
+    {
+      "tag": "sustainable_farming",
+      "patterns": [
+        "What is sustainable farming?",
+        "How to farm sustainably?",
+        "Eco friendly farming",
+        "Protect environment while farming",
+        "Future of farming"
+      ],
+      "responses": [
+        "Sustainable farming means growing food in a way that protects the environment, public health, and animal welfare. It focuses on long-term soil health, reducing chemical use, and conserving water so future generations can continue to farm the land profitably."
+      ]
+    },
+    {
+      "tag": "vermicomposting",
+      "patterns": [
+        "How to make vermicompost?",
+        "Kechua khad benefits",
+        "Using earthworms for farming",
+        "Make fertilizer at home"
+      ],
+      "responses": [
+        "Vermicomposting uses earthworms to turn agricultural waste and cow dung into nutrient-rich organic fertilizer (Kechua Khad). It improves soil aeration, water retention, and reduces your dependency on expensive chemical fertilizers like Urea or DAP."
+      ]
+    },
+    {
+      "tag": "mulching",
+      "patterns": [
+        "What is mulching?",
+        "How to stop weeds naturally?",
+        "Save soil moisture",
+        "Plastic mulch vs organic mulch",
+        "Protect soil from sun"
+      ],
+      "responses": [
+        "Mulching involves covering the soil around your plants with organic material (like straw or dry leaves) or plastic sheets. It prevents weeds from growing, drastically reduces water evaporation, and keeps the soil temperature stable. Organic mulch also breaks down over time to feed the soil!"
+      ]
+    },
+    {
+      "tag": "zero_tillage",
+      "patterns": [
+        "What is zero tillage?",
+        "No till farming",
+        "Should I plough my field?",
+        "Reduce tractor costs",
+        "Direct seeding"
+      ],
+      "responses": [
+        "Zero tillage (or No-Till farming) is a method where you plant seeds without ploughing the soil first. It saves fuel costs for tractors, prevents soil erosion, and keeps beneficial soil microbes intact. It is highly recommended for crops like wheat after a paddy harvest."
+      ]
+    },
+    {
+      "tag": "rainwater_harvesting",
+      "patterns": [
+        "How to save rainwater?",
+        "Farm pond benefits",
+        "Rainwater harvesting for agriculture",
+        "Water shortage in farm",
+        "Jal sanchay"
+      ],
+      "responses": [
+        "Building a farm pond (Krishi Hond) is a great way to harvest rainwater during the monsoon. You can use this stored water for critical irrigation during dry spells. Check our 'Government Schemes' page, as there are often heavy subsidies available for digging farm ponds!"
+      ]
+    },
+    {
+      "tag": "drought_resistant_crops",
+      "patterns": [
+        "What to plant with less water?",
+        "Drought tolerant seeds",
+        "Farming in dry areas",
+        "Crops that need less rain",
+        "Millets farming"
+      ],
+      "responses": [
+        "If you are facing water shortages, consider shifting to drought-resistant crops like Millets (Jowar, Bajra, Ragi), Sorghum, or certain pulses (like Chickpeas/Gram). These crops require significantly less water than paddy or sugarcane and are currently seeing high market demand."
+      ]
+    },
+    {
+      "tag": "companion_planting",
+      "patterns": [
+        "What is companion planting?",
+        "Mix crops together",
+        "Planting marigolds with tomatoes",
+        "Natural pest repellent plants",
+        "Intercropping benefits"
+      ],
+      "responses": [
+        "Companion planting is growing different crops near each other for mutual benefit. For example, planting Marigolds near Tomatoes naturally repels nematodes (root pests). Planting tall crops like corn can provide shade for sensitive crops like spinach."
+      ]
+    },
+    {
+      "tag": "ipm_farming",
+      "patterns": [
+        "What is IPM?",
+        "Integrated Pest Management",
+        "Reduce pesticide use",
+        "Safe pest control",
+        "Biological pest control"
+      ],
+      "responses": [
+        "Integrated Pest Management (IPM) is a smart way to control pests. Instead of immediately spraying harsh chemicals, IPM uses natural predators (like ladybugs), pheromone traps, and crop rotation. You only use chemical pesticides as a last resort, which saves money and keeps your produce chemical-free!"
+      ]
+    },
+    {
+      "tag": "biopesticides",
+      "patterns": [
+        "How to make natural pesticide?",
+        "Neem oil spray",
+        "Jivamrut",
+        "Dashaparni ark",
+        "Organic bug spray"
+      ],
+      "responses": [
+        "You can make powerful natural pesticides at home! Neem oil mixed with mild soap and water is excellent for aphids. You can also prepare 'Jivamrut' using cow dung, cow urine, jaggery, and gram flour to both protect and nourish your crops organically."
+      ]
+    },
+    {
+      "tag": "balcony_farming",
+      "patterns": [
+        "How i start to the grow crop in my balkany",
+        "How to grow vegetables in balcony",
+        "Balcony farming tips",
+        "Apartment gardening",
+        "Grow food in flat",
+        "Can I grow crops in a city?",
+        "home farming in balcony",
+        "What vegetables can I grow in pots on my balcony?",
+        "How to start a balcony garden?",
+        "Best crops for balcony farming",
+        "how to start a home garden"
+
+      ],
+      "responses": [
+        "Starting a home garden in a balcony is a great idea! Begin with easy-to-grow crops like tomatoes, chilies, spinach, or mint. Make sure your balcony gets at least 4-6 hours of sunlight, use a lightweight, nutrient-rich potting mix, and use pots with good drainage holes."
+      ]
+    },
+    {
+      "tag": "container_gardening",
+      "patterns": [
+        "Can I grow vegetables in pots?",
+        "What to grow in containers",
+        "Grow bags for farming",
+        "Pot size for tomatoes",
+        "Growing crops without land"
+      ],
+      "responses": [
+        "You can grow almost anything in containers or grow bags! Leafy greens like coriander and fenugreek (methi) do great in wide, shallow trays. Fruiting plants like tomatoes or eggplants need deeper pots (at least 12-14 inches). We highly recommend fabric grow bags because they prevent overwatering and let the roots breathe!"
+      ]
+    },
+    {
+      "tag": "indoor_low_light",
+      "patterns": [
+        "Vegetables that need less sun",
+        "Indoor farming",
+        "My balcony doesn't have much sunlight",
+        "Shade tolerant crops",
+        "Farming in a dark apartment"
+      ],
+      "responses": [
+        "If your balcony doesn't get much direct sunlight, don't worry! You can successfully grow leafy greens like spinach, lettuce, mint, and coriander, which thrive in partial shade. Root crops like radishes and carrots also tolerate lower light much better than fruiting plants."
+      ]
+    },
+    {
+      "tag": "microgreens",
+      "patterns": [
+        "Fastest crop to grow",
+        "How to grow microgreens",
+        "Harvest in 10 days",
+        "Indoor superfood",
+        "Growing methi on windowsill"
+      ],
+      "responses": [
+        "If you want a super-fast harvest in a tiny space, try growing microgreens! You can sprinkle mustard, fenugreek (methi), or radish seeds in shallow trays on your windowsill. They only take 7 to 14 days to harvest, require very little soil, and are packed with healthy nutrients."
+      ]
+    },
+    {
+      "tag": "home_composting",
+      "patterns": [
+        "How to make compost at home",
+        "Use kitchen waste for plants",
+        "Home fertilizer",
+        "Apartment composting",
+        "Organic fertilizer for balcony"
+      ],
+      "responses": [
+        "You can easily make organic fertilizer right in your flat! Collect fruit peels, vegetable scraps, and used tea leaves in a covered bin. Mix in some dry leaves, coco peat, or shredded cardboard to prevent smells. In about 2-3 months, it will turn into nutrient-rich compost for your balcony plants!"
+      ]
+    }
+    ,
+    {
+      "tag": "organic_manure_recommendation",
+      "patterns": [
+        "What is the best organic manure?",
+        "Recommend organic fertilizer",
+        "Which organic manure is most effective?",
+        "Organic manure suggestions",
+        "Top organic fertilizers",
+        "Best organic fertilizer"
+      ],
+      "responses": [
+        "The 'best' organic manure depends on your soil and crop needs! Common effective options include well-decomposed farmyard manure (FYM), nutrient-rich vermicompost, and homemade compost. Each enriches soil differently. A soil test can help determine what your soil needs most."
+      ]
+    }
+  ]
+}

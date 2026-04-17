@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Krishi Connect</title>
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .signup-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        .footer-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .footer-text a {
+            color: #2e7d32;
+            text-decoration: none;
+        }
+        .footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div style="text-align: right; margin-bottom: 10px;">
+            <select id="language-selector" style="padding: 5px; border-radius: 5px; color: #333;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
+            </select>
+        </div>
+        <h2 data-i18n="create_account">Create Account</h2>
+
+        
+            
+        {% for message in messages %}
+            <div style="color: red; text-align: center; margin-bottom: 10px;">{{ message }}</div>
+        {% endfor %}
+        
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="fullname" data-i18n="full_name">Full Name</label>
+                <input type="text" id="fullname" name="username" placeholder="Enter your full name" data-i18n-placeholder="fullname_placeholder" required>
+            </div>
+            <div class="form-group">
+                <label data-i18n="register_as">Register as</label>
+                <div style="display: flex; gap: 20px;">
+                    <label style="display: flex; align-items: center; font-weight: normal; margin-bottom: 0; cursor: pointer;">
+                        <input type="radio" name="role" value="farmer" required style="width: auto; margin-right: 8px;"> <span data-i18n="farmer">Farmer</span>
+                    </label>
+                    <label style="display: flex; align-items: center; font-weight: normal; margin-bottom: 0; cursor: pointer;">
+                        <input type="radio" name="role" value="consumer" required style="width: auto; margin-right: 8px;"> <span data-i18n="consumer">Consumer</span>
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="email" data-i18n="email_label">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" data-i18n-placeholder="email_placeholder" required>
+                <small id="email-error" style="color: red; display: none;">Invalid email format</small>
+            </div>
+            <div class="form-group">
+                <label for="phone" data-i18n="phone_label">Phone Number</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter phone (e.g. +91...)" required>
+            </div>
+            <div class="form-group">
+                <label for="password" data-i18n="password_label">Password</label>
+                <input type="password" id="password" name="password" placeholder="Create a password" data-i18n-placeholder="create_password_placeholder" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm-password" data-i18n="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" data-i18n-placeholder="confirm_password_placeholder" required>
+                <small id="password-error" style="color: red; display: none;">Passwords do not match</small>
+            </div>
+            <div class="form-group" style="display: flex; align-items: center;">
+                <input type="checkbox" id="show-password" style="width: auto; margin-right: 10px;">
+                <label for="show-password" style="margin-bottom: 0; display: inline;" data-i18n="show_password">Show Password</label>
+            </div>
+            <button type="submit" data-i18n="signup">Sign Up</button>
+        </form>
+        <div class="footer-text">
+            <p><span data-i18n="already_have_account">Already have an account?</span> <a href="/login" data-i18n="login">Login</a></p>
+            <p style="margin-top: 5px;"><a href="/" data-i18n="back_home">Back to Home</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('show-password').addEventListener('change', function() {
+            var passwordField = document.getElementById('password');
+            var confirmPasswordField = document.getElementById('confirm-password');
+            if (this.checked) {
+                passwordField.type = 'text';
+                confirmPasswordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+                confirmPasswordField.type = 'password';
+            }
+        });
+    </script>
+    <script src="{% static 'translations.js' %}"></script>
+</body>
+</html>

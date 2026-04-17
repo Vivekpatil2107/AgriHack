@@ -1,0 +1,436 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .weather-container {
+        max-width: 900px;
+        width: 90%;
+        margin: 2rem auto;
+        padding: 3rem;
+        background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+        border-radius: 20px;
+        color: white;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    .search-box {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 3rem;
+        justify-content: center;
+    }
+    
+    .search-input {
+        padding: 15px 25px;
+        border-radius: 50px;
+        border: none;
+        width: 60%;
+        font-size: 1.1rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        outline: none;
+        transition: width 0.3s ease;
+    }
+    
+    .search-input:focus {
+        width: 65%;
+    }
+    
+    .search-btn {
+        padding: 15px 35px;
+        border-radius: 50px;
+        border: none;
+        background-color: #ff9a9e;
+        background-image: linear-gradient(to right, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+        color: #fff;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .search-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .current-weather {
+        text-align: center;
+        margin-bottom: 4rem;
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    .city-name {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .date-display {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        margin-bottom: 2rem;
+    }
+
+    .weather-icon-large {
+        width: 140px;
+        height: 140px;
+        filter: drop-shadow(0 0 15px rgba(255,255,255,0.4));
+        margin: 1rem 0;
+    }
+
+    .temperature {
+        font-size: 5rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .weather-desc {
+        font-size: 1.8rem;
+        text-transform: capitalize;
+        margin-bottom: 2rem;
+        font-weight: 300;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 1.5rem;
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255,255,255,0.1);
+        padding: 2rem;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .detail-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .detail-value {
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .forecast-section {
+        margin-top: 3rem;
+    }
+
+    .forecast-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @media (max-width: 800px) {
+        .weather-container {
+            padding: 2rem;
+        }
+        .temperature {
+            font-size: 4rem;
+        }
+    }
+    
+    @media (max-width: 600px) {
+        .weather-container {
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            padding: 1.5rem;
+            min-height: 100vh;
+        }
+        .temperature {
+            font-size: 3.5rem;
+        }
+        .search-input {
+            width: 100%;
+        }
+        .search-box {
+            flex-direction: column;
+        }
+        .search-btn {
+            width: 100%;
+        }
+        .city-name {
+            font-size: 2.2rem;
+        }
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        backdrop-filter: blur(5px);
+    }
+
+    .spinner {
+        width: 60px;
+        height: 60px;
+        border: 5px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+
+<div id="loading-spinner" class="loading-overlay" style="display: none;">
+    <div class="spinner"></div>
+</div>
+
+<div class="weather-container">
+    <form method="POST" class="search-box" id="weatherForm" onsubmit="handleWeatherSubmit(event)">
+        {% csrf_token %}
+        <input type="text" name="city" class="search-input" placeholder="Enter city name..." data-i18n-placeholder="enter_city" required>
+        <input type="hidden" name="lat" id="lat">
+        <input type="hidden" name="lon" id="lon">
+        <button type="submit" class="search-btn" data-i18n="chatbot_send">Search</button>
+        <button type="button" class="search-btn" id="geoBtn" style="width: auto; padding: 15px 20px;" title="Use Current Location">
+            <i class="fas fa-map-marker-alt"></i>
+        </button>
+    </form>
+
+    {% if error_message %}
+        <div class="alert alert-warning" style="background: rgba(255,255,255,0.15); color: #ffe9b8; border: 1px solid rgba(255,255,255,0.25); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: center;">
+            {{ error_message }}
+        </div>
+    {% endif %}
+
+    {% if weather_data %}
+        <div class="current-weather">
+            <h2 class="city-name">{{ searched_city }}</h2>
+            <div class="date-display">{% now "l, d F Y" %}</div>
+            
+            {% if weather_data.IconUrl %}
+                <img src="{{ weather_data.IconUrl }}" alt="Weather Icon" class="weather-icon-large">
+            {% endif %}
+            
+            <div class="temperature">
+                {{ weather_data.Temperature.Metric.Value }}°{{ weather_data.Temperature.Metric.Unit }}
+            </div>
+            <div class="weather-desc">{{ weather_data.WeatherText }}</div>
+
+            <div class="details-grid">
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="humidity">Humidity</span>
+                    <span class="detail-value">{{ weather_data.RelativeHumidity }}%</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label" data-i18n="wind_speed">Wind</span>
+                    <span class="detail-value">
+                        {{ weather_data.Wind.Speed.Metric.Value }} {{ weather_data.Wind.Speed.Metric.Unit }}
+                    </span>
+                </div>
+                {% if weather_data.UVIndexText %}
+                 <div class="detail-item">
+                    <span class="detail-label">UV Index</span>
+                    <span class="detail-value">{{ weather_data.UVIndexText }}</span>
+                </div>
+                {% endif %}
+                {% if weather_data.Visibility %}
+                 <div class="detail-item">
+                    <span class="detail-label">Visibility</span>
+                    <span class="detail-value">{{ weather_data.Visibility.Metric.Value }} {{ weather_data.Visibility.Metric.Unit }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    {% elif searched_city %}
+        <div style="text-align: center; margin-top: 4rem;">
+            <h3 data-i18n="weather_not_found">Weather data not found for your location.</h3>
+        </div>
+    {% else %}
+        <div style="text-align: center; margin-top: 6rem; opacity: 0.7;">
+            <i class="fas fa-cloud-sun" style="font-size: 6rem; margin-bottom: 1.5rem;"></i>
+            <h3 data-i18n="enter_city">Enter city name to see weather</h3>
+        </div>
+    {% endif %}
+
+    {% if forecast_data %}
+        <div class="forecast-section">
+            <h3 class="forecast-title">5-Day Forecast</h3>
+            <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 20px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);">
+                <canvas id="forecastChart" height="100"></canvas>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="{% url 'farmer:farmer_dashboard' %}" style="color: rgba(255,255,255,0.7); text-decoration: none; border-bottom: 1px dashed rgba(255,255,255,0.5); padding-bottom: 2px;" data-i18n="back_dashboard">Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- Include FontAwesome if not already in base -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- jQuery and jQuery UI for Autocomplete -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<script>
+    function handleWeatherSubmit(event) {
+        console.log("Weather form submitted");
+        const cityInput = document.querySelector('input[name="city"]').value;
+        const lat = document.getElementById("lat").value;
+        const lon = document.getElementById("lon").value;
+        console.log("City:", cityInput, "Lat:", lat, "Lon:", lon);
+        
+        if (!cityInput && (!lat || !lon)) {
+            alert("Please enter a city name or use current location");
+            event.preventDefault();
+            return false;
+        }
+        $("#loading-spinner").css("display", "flex");
+        return true;
+    }
+
+    $(function() {
+        console.log("Weather page loaded");
+        
+        $(".search-input").autocomplete({
+            source: function(request, response) {
+                console.log("Autocomplete search for:", request.term);
+                $.ajax({
+                    url: "{% url 'farmer:weather_info' %}",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+                        console.log("Autocomplete results:", data);
+                        response(data);
+                    },
+                    error: function(error) {
+                        console.error("Autocomplete error:", error);
+                        response([]);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                console.log("Selected:", ui.item);
+                $(".search-input").val(ui.item.label);
+                $("#lat").val(ui.item.lat || '');
+                $("#lon").val(ui.item.lon || '');
+                console.log("Set lat/lon:", ui.item.lat, ui.item.lon);
+                return false;
+            },
+            change: function(event, ui) {
+                if (!ui.item) {
+                    $("#lat").val('');
+                    $("#lon").val('');
+                }
+            }
+        });
+
+        $("#weatherForm").on("submit", function() {
+            console.log("Form submitting...");
+            $("#loading-spinner").css("display", "flex");
+        });
+
+        $("#geoBtn").click(function() {
+            if (navigator.geolocation) {
+                console.log("Using geolocation");
+                $("#loading-spinner").css("display", "flex");
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    console.log("Got position:", position.coords);
+                    $("#lat").val(position.coords.latitude);
+                    $("#lon").val(position.coords.longitude);
+                    $(".search-input").removeAttr('required');
+                    $("#weatherForm").submit();
+                }, function(error) {
+                    $("#loading-spinner").hide();
+                    console.error("Geolocation error:", error);
+                    alert("Error getting location: " + error.message);
+                });
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+    });
+</script>
+
+        {% if forecast_data %}
+        <script>
+            $(document).ready(function() {
+                const ctx = document.getElementById('forecastChart').getContext('2d');
+                
+                const labels = [];
+                const maxTemps = [];
+                const minTemps = [];
+                
+                {% for day in forecast_data.DailyForecasts %}
+                    labels.push(new Date('{{ day.Date|slice:":10" }}').toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }));
+                    maxTemps.push({{ day.Temperature.Maximum.Value }});
+                    minTemps.push({{ day.Temperature.Minimum.Value }});
+                {% endfor %}
+                
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Max Temperature (°C)',
+                                data: maxTemps,
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderWidth: 2,
+                                tension: 0.4,
+                                fill: true
+                            },
+                            {
+                                label: 'Min Temperature (°C)',
+                                data: minTemps,
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderWidth: 2,
+                                tension: 0.4,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { labels: { color: 'white' } } },
+                        scales: { x: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } }, y: { ticks: { color: 'white' }, grid: { color: 'rgba(255,255,255,0.1)' } } }
+                    }
+                });
+            });
+        </script>
+        {% endif %}
+
+{% endblock %}

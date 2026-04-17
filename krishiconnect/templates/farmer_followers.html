@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Followers - Krishi Connect</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+        }
+        .navbar {
+            background-color: #27ae60;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 { margin: 0; font-size: 1.5rem; }
+        .navbar a { color: white; text-decoration: none; margin: 0 10px; font-weight: 500; font-size: 0.9rem; }
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .btn:hover { background-color: #219150; }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-secondary:hover { background-color: #5a6268; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #f8f9fa; font-weight: 600; color: #555; }
+        .alert { padding: 1rem; margin-bottom: 1rem; border-radius: 4px; }
+        .alert-success { background-color: #d4edda; color: #155724; }
+        .alert-error { background-color: #f8d7da; color: #721c24; }
+        .alert-warning { background-color: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center;">
+            <h1 style="margin-right: 20px;">Krishi Connect</h1>
+            <a href="{% url 'farmer:farmer_dashboard' %}">Dashboard</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- Broadcast Message Card -->
+        <div class="card">
+            <h2>Broadcast to Followers</h2>
+            <p>Send a message (e.g., new product arrival, discount offer) to all your followers.</p>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <textarea name="message" rows="4" placeholder="Write your message here..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Send Broadcast</button>
+                <a href="{% url 'farmer:farmer_dashboard' %}" class="btn btn-secondary" style="text-decoration: none; margin-left: 10px;">Cancel</a>
+            </form>
+        </div>
+
+        <!-- Followers List Card -->
+        <div class="card">
+            <h2>My Followers ({{ followers_page.paginator.count }})</h2>
+            <table>
+                <tbody>
+                    {% for follower in followers_page %}
+                    <tr>
+                        <td>{{ follower.get_full_name|default:follower.username }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr><td style="text-align: center; color: #666;">You don't have any followers yet.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            <!-- Pagination Controls -->
+            {% if followers_page.has_other_pages %}
+            <div style="margin-top: 1rem; text-align: center;">
+                {% if followers_page.has_previous %}
+                    <a href="?page={{ followers_page.previous_page_number }}" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; text-decoration: none;">&laquo; Prev</a>
+                {% endif %}
+                <span style="margin: 0 10px;">Page {{ followers_page.number }} of {{ followers_page.paginator.num_pages }}</span>
+                {% if followers_page.has_next %}
+                    <a href="?page={{ followers_page.next_page_number }}" class="btn btn-secondary" style="padding: 0.3rem 0.6rem; text-decoration: none;">Next &raquo;</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

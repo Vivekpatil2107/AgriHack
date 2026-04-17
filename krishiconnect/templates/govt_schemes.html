@@ -1,0 +1,201 @@
+{% extends "base.html" %} <!-- Adjust this if your base template name is different -->
+{% block content %}
+<div class="container mt-4">
+    <h2>Government Schemes</h2>
+    <a href="{%url 'farmer:farmer_dashboard' %}" class="btn btn-secondary mb-3">Back to Dashboard</a>
+    
+    <!-- Translation Controls -->
+    <div class="translation-controls mb-4 p-3 bg-light rounded">
+        <label for="languageSelect" class="form-label fw-bold">Translate Schemes:</label>
+        <select id="languageSelect" class="form-select d-inline-block w-auto">
+            <option value="en">English (Original)</option>
+            <option value="hi">Hindi</option>
+            <option value="mr">Marathi</option>
+        </select>
+        <button id="translateBtn" class="btn btn-primary btn-sm ms-2">Translate</button>
+    </div>
+
+    <!-- CSRF Token required for the POST request -->
+    {% csrf_token %}
+
+    <div class="row">
+        {% for scheme in schemes %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <!-- Added the class 'scheme-text-to-translate' to the elements -->
+                    <h5 class="card-title scheme-text-to-translate">{{ scheme.title }}</h5>
+                    <p class="card-text scheme-text-to-translate">{{ scheme.description }}</p>
+                    
+                    <a href="{{ scheme.link|default:'#' }}" class="btn btn-success mt-2" target="_blank">Apply Now</a>
+                </div>
+                <div class="card-footer text-muted">
+                    <button type="button" class="btn btn-outline-primary mt-2" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#schemeModal"
+                        onclick="openSchemeModal('{{ scheme.title|escapejs }}', '{{ scheme.description|escapejs }}', '{{ scheme.eligibility_criteria|default:'Detailed eligibility criteria are not specified for this scheme.'|escapejs }}', '{{ scheme.related_documents|default:'Information regarding related documents is not specified.'|escapejs }}', '{{ scheme.link|default:'#'|escapejs }}')">
+                        Read More
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No government schemes available at the moment.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Single Modal for Scheme Details -->
+<div class="modal fade" id="schemeModal" tabindex="-1" aria-labelledby="schemeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title scheme-modal-text" id="schemeModalLabel">Scheme Title</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Modal Translation Controls -->
+                <div class="d-flex justify-content-end mb-4">
+                    <select class="form-select d-inline-block w-auto" id="modalLang">
+                        <option value="en">English (Original)</option>
+                        <option value="hi">Hindi</option>
+                        <option value="mr">Marathi</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm ms-2" id="modalTranslateBtn">Translate</button>
+                </div>
+                
+                <h6 class="fw-bold scheme-modal-text">Description:</h6>
+                <p class="scheme-modal-text" id="modal-description" style="white-space: pre-wrap;">Description goes here.</p>
+
+                <h6 class="fw-bold mt-4 scheme-modal-text">Eligibility Criteria:</h6>
+                <p class="scheme-modal-text" id="modal-eligibility" style="white-space: pre-wrap;">Eligibility goes here.</p>
+                
+                <h6 class="fw-bold mt-4 scheme-modal-text">Related Documents:</h6>
+                <p class="scheme-modal-text" id="modal-documents" style="white-space: pre-wrap;">Documents go here.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="#" class="btn btn-success" id="modal-apply-link" target="_blank">Apply Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Translation JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const translateBtn = document.getElementById('translateBtn');
+    
+    if (translateBtn) {
+        translateBtn.addEventListener('click', function() {
+            const targetLang = document.getElementById('languageSelect').value;
+            const textElements = document.querySelectorAll('.scheme-text-to-translate');
+            
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            textElements.forEach(element => {
+                if (!element.hasAttribute('data-original-text')) {
+                    element.setAttribute('data-original-text', element.innerText.trim());
+                }
+                
+                const originalText = element.getAttribute('data-original-text');
+                
+                if (targetLang === 'en') {
+                    // Revert back to English
+                    element.innerText = originalText;
+                } else {
+                    // Add loading indicator
+                    const currentHTML = element.innerHTML;
+                    element.innerHTML = '<span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span> <span class="text-muted">Translating...</span>';
+                    
+                    const formData = new FormData();
+                    formData.append('action', 'translate');
+                    formData.append('text', originalText);
+                    formData.append('target_lang', targetLang);
+                    
+                    fetch(window.location.pathname, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        },
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            element.innerText = data.translated_text;
+                        } else {
+                            console.error('Translation error:', data.message);
+                            element.innerHTML = currentHTML; 
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Network error during translation:', error);
+                        element.innerHTML = currentHTML; 
+                    });
+                }
+            });
+        });
+    }
+
+    // Modal Translation Logic
+    const modalTranslateBtn = document.getElementById('modalTranslateBtn');
+    if (modalTranslateBtn) {
+        modalTranslateBtn.addEventListener('click', function() {
+            const targetLang = document.getElementById('modalLang').value;
+            const textElements = document.querySelectorAll('.scheme-modal-text');
+            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            textElements.forEach(element => {
+                if (!element.hasAttribute('data-original-text')) {
+                    element.setAttribute('data-original-text', element.innerText.trim());
+                }
+                const originalText = element.getAttribute('data-original-text');
+                
+                if (targetLang === 'en') {
+                    element.innerText = originalText;
+                } else {
+                    const currentHTML = element.innerHTML;
+                    element.innerHTML = '<span class="spinner-border spinner-border-sm text-secondary" role="status" aria-hidden="true"></span> <span class="text-muted">Translating...</span>';
+                    const formData = new FormData();
+                    formData.append('action', 'translate');
+                    formData.append('text', originalText);
+                    formData.append('target_lang', targetLang);
+                    
+                    fetch(window.location.pathname, {
+                        method: 'POST',
+                        headers: { 'X-CSRFToken': csrfToken },
+                        body: formData
+                    }).then(response => response.json()).then(data => {
+                        if (data.status === 'success') { element.innerText = data.translated_text; } 
+                        else { element.innerHTML = currentHTML; }
+                    }).catch(error => {
+                        element.innerHTML = currentHTML; 
+                    });
+                }
+            });
+        });
+    }
+});
+
+// Dedicated robust function to inject modal data
+function openSchemeModal(title, description, eligibility, documents, link) {
+    const schemeModal = document.getElementById('schemeModal');
+    
+    if (schemeModal) {
+        document.getElementById('modalLang').value = 'en';
+        schemeModal.querySelector('#schemeModalLabel').textContent = title;
+        schemeModal.querySelector('#modal-description').textContent = description;
+        schemeModal.querySelector('#modal-eligibility').textContent = eligibility;
+        schemeModal.querySelector('#modal-documents').textContent = documents;
+        schemeModal.querySelector('#modal-apply-link').setAttribute('href', link);
+        
+        schemeModal.querySelectorAll('.scheme-modal-text').forEach(el => {
+            el.removeAttribute('data-original-text');
+        });
+    }
+}
+</script>
+{% endblock %}

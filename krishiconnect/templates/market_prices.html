@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Market Prices</h1>
+    <a href="{% url 'farmer:farmer_dashboard' %}" class="btn btn-secondary mb-4">Back to Dashboard</a>
+
+    <form method="post" class="mb-4" onsubmit="handleMarketPricesSubmit(event)">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="city">Select City:</label>
+            <select name="city" id="city" class="form-control" required>
+                <option value="">-- Select a City --</option>
+                {% for c in cities %}
+                    <option value="{{ c }}" {% if c == selected_city %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="commodity">Enter Commodity:</label>
+            <input type="text" name="commodity" id="commodity" class="form-control" placeholder="e.g., Onion, Wheat" value="{{ commodity|default_if_none:'' }}" required>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Get Prices</button>
+    </form>
+
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Error:</strong> {{ error_message }}
+        </div>
+    {% endif %}
+
+    {% if response_text %}
+        <div class="alert alert-info">
+            <strong>Search Results:</strong> {{ response_text }}
+        </div>
+    {% endif %}
+
+    {% if searched and not avg_price and not response_text %}
+        <div class="alert alert-warning">
+            No market price data was found. Please try another city or commodity.
+        </div>
+    {% endif %}
+
+    {% if min_price and max_price and avg_price %}
+        <div class="row mt-4">
+            <!-- Table Container -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Estimated Price Summary (₹/quintal)
+                    </div>
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <table style="width: 100%; border-collapse: collapse; text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th style="padding: 10px; background-color: #f8f9fa; border: 1px solid #ddd;">Lowest</th>
+                                    <th style="padding: 10px; background-color: #f8f9fa; border: 1px solid #ddd;">Average</th>
+                                    <th style="padding: 10px; background-color: #f8f9fa; border: 1px solid #ddd;">Highest</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding: 15px 10px; border: 1px solid #ddd; font-weight: bold; color: #dc3545; font-size: 1.2rem;">₹ {{ min_price }}</td>
+                                    <td style="padding: 15px 10px; border: 1px solid #ddd; font-weight: bold; color: #17a2b8; font-size: 1.2rem;">₹ {{ avg_price }}</td>
+                                    <td style="padding: 15px 10px; border: 1px solid #ddd; font-weight: bold; color: #27ae60; font-size: 1.2rem;">₹ {{ max_price }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chart Container -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        Price Visualization (₹/quintal)
+                    </div>
+                    <div class="card-body">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if historical_dates and historical_prices %}
+        <div class="row mt-4 mb-4">
+            <div class="col-md-12">
+                <div class="card h-100">
+                    <div class="card-header">
+                        30-Day Price Trend for {{ commodity }} (₹/quintal)
+                    </div>
+                    <div class="card-body">
+                        <canvas id="trendChart" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Include Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var ctx = document.getElementById('priceChart').getContext('2d');
+                var priceChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Lowest Price', 'Average Price', 'Highest Price'],
+                        datasets: [{
+                            label: 'Market Price (₹) for {{ commodity|escapejs }} in {{ selected_city|escapejs }}',
+                            data: [{{ min_price }}, {{ avg_price }}, {{ max_price }}],
+                            backgroundColor: [
+                                'rgba(220, 53, 69, 0.6)',   // Red for Lowest
+                                'rgba(23, 162, 184, 0.6)',  // Info blue for Average
+                                'rgba(39, 174, 96, 0.6)'    // Green for Highest
+                            ],
+                            borderColor: [
+                                'rgba(220, 53, 69, 1)',
+                                'rgba(23, 162, 184, 1)',
+                                'rgba(39, 174, 96, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Price in ₹ (INR)'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false } // Hide legend since we have 3 distinct colors mapping to the labels
+                        }
+                    }
+                });
+
+                {% if historical_dates and historical_prices %}
+                var trendCtx = document.getElementById('trendChart').getContext('2d');
+                var trendChart = new Chart(trendCtx, {
+                    type: 'line',
+                    data: {
+                        labels: {{ historical_dates|safe }},
+                        datasets: [{
+                            label: 'Average Price (₹)',
+                            data: {{ historical_prices|safe }},
+                            backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                            borderColor: 'rgba(39, 174, 96, 1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.3,
+                            pointBackgroundColor: 'rgba(39, 174, 96, 1)',
+                            pointRadius: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: false,
+                                title: {
+                                    display: true,
+                                    text: 'Price in ₹ (INR)'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { display: true }
+                        }
+                    }
+                });
+                {% endif %}
+            });
+        </script>
+    {% endif %}
+
+    <script>
+        function handleMarketPricesSubmit(event) {
+            const city = document.getElementById("city").value;
+            const commodity = document.getElementById("commodity").value;
+            console.log("Market Prices form submitted - City:", city, "Commodity:", commodity);
+            
+            if (!city) {
+                alert("Please select a city");
+                event.preventDefault();
+                return false;
+            }
+            
+            if (!commodity) {
+                alert("Please enter a commodity");
+                event.preventDefault();
+                return false;
+            }
+            
+            const btn = document.getElementById("submitBtn");
+            btn.disabled = true;
+            btn.innerText = "Searching...";
+            return true;
+        }
+
+        $(document).ready(function() {
+            console.log("Market Prices page loaded");
+        });
+    </script>
+</div>
+
+<script>
+    function translateMarketPrice(targetLang) {
+        const displayElement = document.getElementById('market-price-display');
+        if (!displayElement) {
+            console.error("Market price display element not found.");
+            return;
+        }
+
+        const originalText = displayElement.dataset.originalText || displayElement.textContent.trim();
+        displayElement.dataset.originalText = originalText; // Store original text
+
+        displayElement.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Translating...';
+
+        fetch("{% url 'farmer:market_prices' %}", { // Use the correct URL name for market_prices
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: new URLSearchParams({ 'action': 'translate', 'text': originalText, 'target_lang': targetLang })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                displayElement.textContent = data.translated_text;
+            } else {
+                displayElement.textContent = originalText + ' (Translation failed: ' + data.message + ')';
+                console.error('Translation error:', data.message);
+            }
+        })
+        .catch(error => {
+            displayElement.textContent = originalText + ' (Translation failed due to network error)';
+            console.error('Network error during translation:', error);
+        });
+    }
+</script>
+{% endblock %}

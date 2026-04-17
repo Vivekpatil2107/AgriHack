@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - Krishi Connect</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e9f5e9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 1.5rem;
+        }
+        #otp {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #1b5e20;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .message {
+            color: red;
+            margin-bottom: 10px;
+        }
+        .timer-text {
+            margin-bottom: 15px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        #time {
+            font-weight: bold;
+            color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Verify OTP</h2>
+        <p style="color: #666; margin-bottom: 20px;">Please enter the 6-digit OTP sent to your email.</p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="timer-text">Time remaining: <span id="time">10:00</span></div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <label for="otp" style="display:none;">OTP:</label>
+            <input type="text" id="otp" name="otp" placeholder="------" maxlength="6" pattern="\d{6}" inputmode="numeric" required>
+            <button type="submit" id="verify-btn">Verify Account</button>
+        </form>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'resend_otp' %}" style="color: #2e7d32; text-decoration: none; font-weight: 600;">Resend OTP</a>
+        </div>
+    </div>
+
+    <script>
+        function startTimer(duration, display) {
+            var timer = duration, minutes, seconds;
+            var interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "00:00";
+                    var btn = document.getElementById('verify-btn');
+                    btn.disabled = true;
+                    btn.innerText = "OTP Expired";
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            var tenMinutes = 60 * 10 ;
+            var display = document.querySelector('#time');
+            startTimer(tenMinutes, display);
+        };
+    </script>
+</body>
+</html>

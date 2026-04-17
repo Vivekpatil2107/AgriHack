@@ -1,0 +1,259 @@
+/* Responsive Design Styles */
+
+/* Extra small devices (phones, less than 576px) */
+@media (max-width: 575.98px) {
+    body {
+        font-size: 14px;
+    }
+    
+    .container {
+        padding: 10px;
+    }
+    
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    btn, .btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    h2 {
+        font-size: 1.25rem;
+    }
+    
+    .form-control, .form-select {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+    
+    .sidebar {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    .main-content {
+        width: 100%;
+    }
+    
+    table {
+        font-size: 12px;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .form-control, .form-select {
+        font-size: 15px;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .sidebar {
+        width: 25%;
+        float: left;
+    }
+    
+    .main-content {
+        width: 75%;
+        float: right;
+    }
+    
+    .card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .container {
+        max-width: 1200px;
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
+}
+
+/* Responsive images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsive tables */
+@media (max-width: 768px) {
+    table {
+        font-size: 12px;
+    }
+    
+    table th, table td {
+        padding: 8px 5px;
+    }
+    
+    table {
+        overflow-x: auto;
+        display: block;
+    }
+}
+
+/* Responsive forms */
+.form-group {
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+    }
+    
+    .form-control, .form-select {
+        width: 100%;
+    }
+}
+
+/* Responsive navigation */
+@media (max-width: 768px) {
+    nav {
+        padding: 10px;
+    }
+    
+    nav a {
+        display: block;
+        padding: 10px;
+        width: 100%;
+    }
+}
+
+/* Responsive grid */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.col {
+    flex: 1;
+    min-width: 250px;
+}
+
+@media (max-width: 768px) {
+    .col, .col-md-6, .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    .col-md-4 {
+        flex: 0 0 33.333%;
+        max-width: 33.333%;
+    }
+    
+    .col-md-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+}
+
+/* Responsive utilities */
+.hide-mobile {
+    display: none !important;
+}
+
+.show-mobile {
+    display: block !important;
+}
+
+@media (min-width: 768px) {
+    .hide-mobile {
+        display: block !important;
+    }
+    
+    .show-mobile {
+        display: none !important;
+    }
+}
+
+/* Responsive padding and margins */
+@media (max-width: 768px) {
+    .p-md-2 {
+        padding: 5px !important;
+    }
+    
+    .m-md-2 {
+        margin: 5px !important;
+    }
+}
+
+/* Responsive typography */
+@media (max-width: 768px) {
+    p, li, a {
+        line-height: 1.4;
+    }
+}
+
+/* Responsive buttons */
+@media (max-width: 768px) {
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+/* Fix for Bootstrap compatibility */
+@media (max-width: 575.98px) {
+    .container-fluid, .container {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+}
+
+/* Responsive cards */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    .card-header {
+        padding: 10px;
+    }
+    
+    .card-body {
+        padding: 10px;
+    }
+}

@@ -1,0 +1,88 @@
+<!-- payment.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Krishi Connect</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+        .payment-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 { color: #333; margin-bottom: 1rem; }
+        .amount { font-size: 1.5rem; font-weight: bold; color: #28a745; margin: 1rem 0; }
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: none;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .btn-primary { background-color: #28a745; color: white; }
+        .btn-primary:hover { background-color: #218838; }
+        .btn-secondary { background-color: #6c757d; color: white; }
+        .btn-secondary:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+    <div class="payment-card">
+        <h2>Complete Payment</h2>
+        <p>Order #{{ order.id }}</p>
+        <div class="amount">₹{{ order.total_amount }}</div>
+        <p>Please complete your payment to confirm the order.</p>
+        
+        <button id="rzp-button1" class="btn btn-primary">Pay Now</button>
+        <a href="{% url 'consumer:consumer_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+    var options = {
+        "key": "{{ razorpay_key_id }}",
+        "amount": {{ amount }},
+        "currency": "{{ currency }}",
+        "name": "Krishi Connect",
+        "description": "Order Payment #{{ order.id }}",
+        "order_id": "{{ razorpay_order_id }}",
+        "callback_url": "{{ callback_url }}",
+        "prefill": {
+            "email": "{{ user_email }}",
+            "contact": "{{ user_phone }}"
+        },
+        "theme": {
+            "color": "#28a745"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+    // Automatically open on load if desired
+    window.onload = function() {
+        rzp1.open();
+    };
+    </script>
+</body>
+</html>

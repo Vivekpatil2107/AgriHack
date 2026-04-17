@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="sales_history_title">Sales History - Krishi Connect</title>
+    {% load static %}
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+        }
+        .navbar {
+            background-color: #27ae60;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 { margin: 0; font-size: 1.5rem; }
+        .navbar a { color: white; text-decoration: none; margin: 0 10px; font-weight: 500; font-size: 0.9rem; }
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .filter-form {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #333; }
+        .form-group input, .form-group select {
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .btn {
+            background-color: #27ae60;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+        }
+        .btn-secondary { background-color: #6c757d; }
+        .btn-csv { background-color: #17a2b8; }
+        table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { background-color: #f8f9fa; font-weight: 600; color: #555; }
+        .pagination { margin-top: 2rem; text-align: center; }
+        .pagination a, .pagination span { color: #27ae60; padding: 8px 16px; text-decoration: none; border: 1px solid #ddd; margin: 0 4px; border-radius: 4px; }
+        .pagination .current { background-color: #27ae60; color: white; border: 1px solid #27ae60; }
+        .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; color: white; text-transform: capitalize; }
+        .status-pending { background-color: #ffc107; color: black; }
+        .status-processing { background-color: #007bff; }
+        .status-shipped { background-color: #17a2b8; }
+        .status-delivered { background-color: #28a745; }
+        .status-cancelled { background-color: #dc3545; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .modal-content { background: white; padding: 2rem; border-radius: 8px; width: 90%; max-width: 700px; position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2); animation: fadeIn 0.3s ease-out; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 1.8rem; cursor: pointer; border: none; background: none; color: #666; line-height: 1; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div style="display: flex; align-items: center;">
+            <h1 data-i18n="app_name" style="margin-right: 20px;">Krishi Connect</h1>
+            <a href="{% url 'farmer:farmer_dashboard' %}" data-i18n="dashboard">Dashboard</a>
+            <a href="{% url 'farmer:weather_info' %}" data-i18n="nav_weather">Weather</a>
+            <a href="{% url 'farmer:plant_disease_prediction' %}" data-i18n="nav_disease">Plant and Disease Prediction</a>
+            <a href="{% url 'farmer:govt_schemes' %}" data-i18n="nav_schemes">Govt Schemes</a>
+            <a href="{% url 'farmer:market_prices' %}" data-i18n="nav_prices">Market Prices</a>
+        </div>
+        <div style="display: flex; align-items: center;">
+            <select id="language-selector" style="padding: 5px; border-radius: 4px; margin-right: 15px;">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="mr">मराठी</option>
+            </select>
+            <a href="{% url 'logout' %}" data-i18n="logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                <h2 data-i18n="sales_history_heading">Sales History</h2>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="{% url 'farmer:download_sales_report' %}?status={{ status_filter|default:'' }}&start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}" class="btn btn-csv" data-i18n="export_csv_btn">Export to CSV</a>
+                    <a href="{% url 'farmer:farmer_dashboard' %}" class="btn" data-i18n="back_dashboard_btn">Back to Dashboard</a>
+                </div>
+            </div>
+            
+
+            <form method="GET" class="filter-form">
+                <div class="form-group"><label for="start_date" data-i18n="start_date">Start Date</label><input type="date" id="start_date" name="start_date" value="{{ start_date|default:'' }}"></div>
+                <div class="form-group"><label for="end_date" data-i18n="end_date">End Date</label><input type="date" id="end_date" name="end_date" value="{{ end_date|default:'' }}"></div>
+                <div class="form-group">
+                    <label for="status" data-i18n="status_label">Status</label>
+                    <select id="status" name="status">
+                        <option value="">All</option>
+                        <option value="Pending" {% if status_filter == 'Pending' %}selected{% endif %}>Pending</option>
+                        <option value="Processing" {% if status_filter == 'Processing' %}selected{% endif %}>Processing</option>
+                        <option value="Shipped" {% if status_filter == 'Shipped' %}selected{% endif %}>Shipped</option>
+                        <option value="Delivered" {% if status_filter == 'Delivered' %}selected{% endif %}>Delivered</option>
+                        <option value="Cancelled" {% if status_filter == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                    </select>
+                </div>
+                <div style="padding-top: 1rem;"><button type="submit" class="btn" data-i18n="filter_btn">Filter</button><a href="{% url 'farmer:sales_history' %}" class="btn btn-secondary" data-i18n="clear_btn" style="margin-left: 10px;">Clear</a></div>
+            </form>
+
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-i18n="th_order_id">Order ID</th>
+                            <th data-i18n="th_date">Date</th>
+                            <th>Consumer</th>
+                            <th data-i18n="th_items">No. of Products</th>
+                            <th data-i18n="th_total">Total Bill</th>
+                            <th data-i18n="th_status">Status</th>
+                            <th data-i18n="th_actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr>
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.created_at|date:"M d, Y" }}</td>
+                            <td>{{ order.user.get_full_name|default:order.user.username }}</td>
+                            <td>{{ order.item_count }}</td>
+                            <td>₹{{ order.total_amount|floatformat:2 }}</td>
+                            <td><span class="status-badge status-{{ order.status|lower }}">{{ order.status }}</span></td>
+                            <td>
+                                <button type="button" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.9rem; width: auto;" onclick="openOrderDetailModal({{ order.id }})">
+                                    View Details
+                                </button>
+                            </td>
+                        </tr>
+
+                        <!-- Order Detail Modal for each order -->
+                        <div class="modal-overlay" id="orderDetailModal{{ order.id }}">
+                            <div class="modal-content">
+                                <button class="close-btn" onclick="closeOrderDetailModal({{ order.id }})">&times;</button>
+                                <h3 style="margin-top: 0; color: #27ae60;">Order Details: #{{ order.id }}</h3>
+                                
+                                <!-- Customer and Shipping Info -->
+                                <h5>Customer: {{ order.user.get_full_name|default:order.user.username }}</h5>
+                                <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+                                <p><strong>Contact:</strong> {{ order.user.userprofile.phone|default:'N/A' }} | {{ order.user.email }}</p>
+                                <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+                                <hr>
+
+                                <!-- Items in the order -->
+                                <h5>Items Ordered:</h5>
+                                <ul style="list-style: none; padding: 0; max-height: 150px; overflow-y: auto;">
+                                    {% for item in order.items.all %}
+                                        {% if item.product.farmer == request.user %}
+                                            <li style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee;">
+                                                <div>
+                                                    <h6 style="margin: 0;">{{ item.product.name }}</h6>
+                                                    <small style="color: #666;">{{ item.quantity }} kg</small>
+                                                </div>
+                                                <span style="color: #333; font-weight: bold;">₹{{ item.price|floatformat:2 }}</span>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                                <hr>
+
+                                <!-- Actions for the farmer -->
+                                <h5>Manage Order:</h5>
+                                <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                                    {% if order.status == 'Pending' %}
+                                        <form action="{% url 'farmer:manage_order' order.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="accept">
+                                            <button type="submit" class="btn" style="width: auto; background-color: #28a745;">Accept Order</button>
+                                        </form>
+                                        <form action="{% url 'farmer:manage_order' order.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="reject">
+                                            <button type="submit" class="btn" style="width: auto; background-color: #dc3545;">Reject Order</button>
+                                        </form>
+                                    {% elif order.status == 'Processing' %}
+                                         <form action="{% url 'farmer:manage_order' order.id %}" method="post" style="display: inline;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="ship">
+                                            <button type="submit" class="btn" style="width: auto; background-color: #17a2b8;">Ship Order</button>
+                                        </form>
+                                    {% elif order.status == 'Shipped' %}
+                                        <form action="{% url 'farmer:manage_order' order.id %}" method="post" style="display: flex; align-items: center; gap: 10px;">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="deliver">
+                                            <label for="otp-{{order.id}}" style="margin-bottom: 0;">Delivery OTP:</label>
+                                            <input type="text" name="otp" id="otp-{{order.id}}" style="padding: 0.6rem; border: 1px solid #ddd; border-radius: 4px; width: 120px;" required>
+                                            <button type="submit" class="btn" style="width: auto;">Mark as Delivered</button>
+                                        </form>
+                                    {% elif order.status == 'Delivered' %}
+                                        <p style="color: #28a745; margin: 0;">This order has been completed.</p>
+                                    {% elif order.status == 'Cancelled' %}
+                                        <p style="color: #dc3545; margin: 0;">This order was cancelled.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <tr><td colspan="7" style="text-align: center; padding: 20px;">No sales history found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if orders.has_previous %}
+                        <a href="?page=1&status={{ status_filter|default:'' }}&start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}">&laquo; first</a>
+                        <a href="?page={{ orders.previous_page_number }}&status={{ status_filter|default:'' }}&start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}">previous</a>
+                    {% endif %}
+                    <span class="current">Page {{ orders.number }} of {{ orders.paginator.num_pages }}.</span>
+                    {% if orders.has_next %}
+                        <a href="?page={{ orders.next_page_number }}&status={{ status_filter|default:'' }}&start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}">next</a>
+                        <a href="?page={{ orders.paginator.num_pages }}&status={{ status_filter|default:'' }}&start_date={{ start_date|default:'' }}&end_date={{ end_date|default:'' }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'translations.js' %}"></script>
+    <script>
+        function openOrderDetailModal(orderId) {
+            document.getElementById('orderDetailModal' + orderId).style.display = 'flex';
+        }
+        function closeOrderDetailModal(orderId) {
+            document.getElementById('orderDetailModal' + orderId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
