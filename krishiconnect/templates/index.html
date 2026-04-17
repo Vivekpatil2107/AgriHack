@@ -72,9 +72,8 @@
       .hero-inner {
         max-width: 1180px;
         margin: 0 auto;
-        display: grid;
-        grid-template-columns: 1.1fr 0.9fr;
-        gap: 2.4rem;
+        display: flex;
+        justify-content: center;
         align-items: center;
         position: relative;
         z-index: 2;
@@ -191,14 +190,14 @@
         padding: 4rem 1.5rem;
         max-width: 1180px;
         margin: 0 auto;
-        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+        background-image: url("https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80");
         background-size: cover;
         background-position: center;
         border-radius: 20px;
         position: relative;
       }
       .section::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
@@ -243,16 +242,29 @@
         padding: 1.8rem;
         box-shadow: 0 18px 48px rgba(33, 82, 38, 0.06);
         border: 1px solid rgba(224, 237, 228, 0.85);
-        transition: transform 0.5s ease, box-shadow 0.5s ease;
+        transition:
+          transform 0.5s ease,
+          box-shadow 0.5s ease;
         transform-style: preserve-3d;
         animation: float 4s ease-in-out infinite;
       }
-      .card:nth-child(2) { animation-delay: 0.5s; }
-      .card:nth-child(3) { animation-delay: 1s; }
-      .card:nth-child(4) { animation-delay: 1.5s; }
+      .card:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+      .card:nth-child(3) {
+        animation-delay: 1s;
+      }
+      .card:nth-child(4) {
+        animation-delay: 1.5s;
+      }
       @keyframes float {
-        0%, 100% { transform: translateY(0px) rotateY(0deg); }
-        50% { transform: translateY(-10px) rotateY(2deg); }
+        0%,
+        100% {
+          transform: translateY(0px) rotateY(0deg);
+        }
+        50% {
+          transform: translateY(-10px) rotateY(2deg);
+        }
       }
       .card:hover {
         animation-play-state: paused;
@@ -340,14 +352,8 @@
         text-decoration: none;
       }
       @media (max-width: 980px) {
-        .hero-inner {
-          grid-template-columns: 1fr;
-        }
         .hero-copy h1 {
           font-size: 3rem;
-        }
-        .stats-grid {
-          grid-template-columns: 1fr;
         }
       }
       @media (max-width: 680px) {
@@ -553,38 +559,6 @@
             >
             <a href="/login" class="btn-secondary" data-i18n="login">Login</a>
           </div>
-          <div class="stats-grid">
-            <div class="stat-chip">
-              <span class="icon">🌾</span>
-              <div>
-                <strong>3,500+</strong>
-                Farmers empowered
-              </div>
-            </div>
-            <div class="stat-chip">
-              <span class="icon">📈</span>
-              <div>
-                <strong>12%</strong>
-                Average price growth
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="hero-visual">
-          <div class="hero-card">
-            <h3>Direct farmer-to-market access</h3>
-            <p>
-              Sell produce directly, save on intermediaries, and reach more
-              buyers with an easy-to-use dashboard.
-            </p>
-          </div>
-          <div class="hero-card">
-            <h3>Smart market insights</h3>
-            <p>
-              Use real-time price updates, crop alerts, and buyer signals to
-              make informed decisions every season.
-            </p>
-          </div>
         </div>
       </div>
     </div>
@@ -601,7 +575,17 @@
       <div class="grid">
         <div class="card">
           <div class="icon-badge">🌱</div>
-          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Farming" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <img
+            src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Digital Farming"
+            style="
+              width: 100%;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 10px;
+              margin: 10px 0;
+            "
+          />
           <h3 data-i18n="obj_1_title">Empower Farmers Digitally</h3>
           <p data-i18n="obj_1_desc">
             Provide farmers with a platform to sell their product directly to
@@ -610,7 +594,17 @@
         </div>
         <div class="card">
           <div class="icon-badge">🚚</div>
-          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Market Reach" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <img
+            src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Market Reach"
+            style="
+              width: 100%;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 10px;
+              margin: 10px 0;
+            "
+          />
           <h3 data-i18n="obj_2_title">Increase Market Reach</h3>
           <p data-i18n="obj_2_desc">
             Help farmers reach wider markets across India through online access.
@@ -618,7 +612,17 @@
         </div>
         <div class="card">
           <div class="icon-badge">💡</div>
-          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Literacy" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <img
+            src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Digital Literacy"
+            style="
+              width: 100%;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 10px;
+              margin: 10px 0;
+            "
+          />
           <h3 data-i18n="obj_3_title">Promote Digital Literacy</h3>
           <p data-i18n="obj_3_desc">
             Encourage rural farmers to adopt digital tools for trading and
@@ -627,7 +631,17 @@
         </div>
         <div class="card">
           <div class="icon-badge">📊</div>
-          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agricultural Growth" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <img
+            src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+            alt="Agricultural Growth"
+            style="
+              width: 100%;
+              height: 150px;
+              object-fit: cover;
+              border-radius: 10px;
+              margin: 10px 0;
+            "
+          />
           <h3 data-i18n="obj_4_title">Support Agricultural Growth</h3>
           <p data-i18n="obj_4_desc">
             Enable farmers to showcase products, buy agricultural tools, and
