@@ -5,6 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Krishi Connect - Home</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --primary: #2e7d32;
@@ -52,12 +56,15 @@
         opacity: 0.85;
       }
       .hero {
-        padding: 4rem 1.5rem 2rem;
+        min-height: 72vh;
+        padding: 6rem 1.5rem 3rem;
         overflow: hidden;
         background-image: url("https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80");
         background-size: cover;
         background-position: center;
         position: relative;
+        animation: bgPulse 12s ease-in-out infinite;
+        backdrop-filter: blur(1px);
       }
       .hero::before {
         content: "";
@@ -77,6 +84,7 @@
         align-items: center;
         position: relative;
         z-index: 2;
+        animation: fadeInUp 1s ease both;
       }
       .hero-copy p:first-of-type {
         margin-bottom: 1rem;
@@ -84,12 +92,16 @@
         letter-spacing: 0.18em;
         color: white;
         text-transform: uppercase;
+        opacity: 0;
+        animation: fadeInUp 1s ease 0s both;
       }
       .hero-copy h1 {
         color: white;
         font-size: clamp(2.6rem, 5vw, 3.8rem);
         line-height: 1.02;
         margin: 0 0 1.25rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease 0.1s both;
       }
       .hero-copy p {
         font-size: 1.12rem;
@@ -97,11 +109,28 @@
         max-width: 640px;
         margin: 0 0 1.8rem;
         line-height: 1.8;
+        opacity: 0;
+        animation: fadeInUp 1s ease 0.2s both;
       }
       .hero-buttons {
         display: flex;
         flex-wrap: wrap;
         gap: 1rem;
+        opacity: 0;
+        animation: fadeInUp 1s ease 0.4s both;
+      }
+      .navbar {
+        background: rgba(46, 125, 50, 0.96);
+        color: white;
+        padding: 1.1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 18px 45px rgba(14, 61, 20, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        animation: slideDown 0.8s ease both;
       }
       .btn-primary,
       .btn-secondary {
@@ -114,8 +143,10 @@
         align-items: center;
         justify-content: center;
         transition:
-          transform 0.2s ease,
-          box-shadow 0.2s ease;
+          transform 0.3s ease,
+          box-shadow 0.3s ease,
+          background 0.3s ease,
+          color 0.3s ease;
       }
       .btn-primary {
         background: var(--primary);
@@ -125,6 +156,7 @@
       }
       .btn-primary:hover {
         transform: translateY(-2px);
+        box-shadow: 0 20px 35px rgba(46, 125, 50, 0.25);
       }
       .btn-secondary {
         background: white;
@@ -139,6 +171,7 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 1rem;
         margin-top: 2rem;
+        animation: fadeIn 1.4s ease both;
       }
       .stat-chip {
         background: #f7fff7;
@@ -195,6 +228,7 @@
         background-position: center;
         border-radius: 20px;
         position: relative;
+        animation: fadeInUp 1.2s ease both;
       }
       .section::before {
         content: "";
@@ -270,6 +304,43 @@
         animation-play-state: paused;
         transform: rotateY(5deg) translateY(-10px);
         box-shadow: 0 25px 60px rgba(33, 82, 38, 0.15);
+      }
+      @keyframes fadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      @keyframes slideDown {
+        0% {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes bgPulse {
+        0%,
+        100% {
+          background-position: center top;
+        }
+        50% {
+          background-position: center bottom;
+        }
       }
       .card h3 {
         margin-top: 0;
