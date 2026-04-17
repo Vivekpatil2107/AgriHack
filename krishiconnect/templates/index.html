@@ -1,631 +1,898 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Krishi Connect - Home</title>
     <style>
-        :root {
-            --primary: #2e7d32;
-            --primary-dark: #1b5e20;
-            --muted: #4a5f47;
-            --bg: #f5fbf5;
-            --card: #ffffff;
-            --border: #e5efe3;
-        }
-        * { box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            color: #243324;
-            background: linear-gradient(180deg, #f6fcf6 0%, #eaf5ea 100%);
-        }
-        .navbar {
-            background: rgba(46, 125, 50, 0.96);
-            color: white;
-            padding: 1.1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 18px 45px rgba(14, 61, 20, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 50;
-        }
-        .navbar h1 { margin: 0; font-size: 1.5rem; letter-spacing: 0.05em; }
-        .navbar a { color: white; text-decoration: none; margin-left: 22px; font-weight: 600; transition: opacity 0.2s; }
-        .navbar a:hover { opacity: 0.85; }
-        .hero {
-            padding: 4rem 1.5rem 2rem;
-            overflow: hidden;
-        }
+      :root {
+        --primary: #2e7d32;
+        --primary-dark: #1b5e20;
+        --muted: #4a5f47;
+        --bg: #f5fbf5;
+        --card: #ffffff;
+        --border: #e5efe3;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        color: #243324;
+        background: linear-gradient(180deg, #f6fcf6 0%, #eaf5ea 100%);
+        perspective: 1000px;
+      }
+      .navbar {
+        background: rgba(46, 125, 50, 0.96);
+        color: white;
+        padding: 1.1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 18px 45px rgba(14, 61, 20, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .navbar h1 {
+        margin: 0;
+        font-size: 1.5rem;
+        letter-spacing: 0.05em;
+      }
+      .navbar a {
+        color: white;
+        text-decoration: none;
+        margin-left: 22px;
+        font-weight: 600;
+        transition: opacity 0.2s;
+      }
+      .navbar a:hover {
+        opacity: 0.85;
+      }
+      .hero {
+        padding: 4rem 1.5rem 2rem;
+        overflow: hidden;
+        background-image: url("https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80");
+        background-size: cover;
+        background-position: center;
+        position: relative;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(46, 125, 50, 0.3);
+        z-index: 1;
+      }
+      .hero-inner {
+        max-width: 1180px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 2.4rem;
+        align-items: center;
+        position: relative;
+        z-index: 2;
+      }
+      .hero-copy p:first-of-type {
+        margin-bottom: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: #4c7f56;
+        text-transform: uppercase;
+      }
+      .hero-copy h1 {
+        color: var(--primary);
+        font-size: clamp(2.6rem, 5vw, 3.8rem);
+        line-height: 1.02;
+        margin: 0 0 1.25rem;
+      }
+      .hero-copy p {
+        font-size: 1.12rem;
+        color: var(--muted);
+        max-width: 640px;
+        margin: 0 0 1.8rem;
+        line-height: 1.8;
+      }
+      .hero-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+      .btn-primary,
+      .btn-secondary {
+        border-radius: 999px;
+        padding: 0.95rem 1.9rem;
+        font-size: 1rem;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+        border: none;
+        box-shadow: 0 16px 28px rgba(46, 125, 50, 0.18);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+      }
+      .btn-secondary {
+        background: white;
+        color: var(--primary-dark);
+        border: 1px solid rgba(46, 125, 50, 0.16);
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .stat-chip {
+        background: #f7fff7;
+        border: 1px solid #deefde;
+        border-radius: 18px;
+        padding: 1rem 1.1rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        box-shadow: 0 10px 35px rgba(33, 103, 45, 0.06);
+      }
+      .stat-chip .icon {
+        width: 46px;
+        height: 46px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(46, 125, 50, 0.12);
+        color: var(--primary);
+        font-size: 1.25rem;
+      }
+      .stat-chip strong {
+        display: block;
+        font-size: 1.25rem;
+        color: #243324;
+      }
+      .hero-visual {
+        display: grid;
+        gap: 1.3rem;
+      }
+      .hero-card {
+        background: white;
+        padding: 1.8rem;
+        border-radius: 28px;
+        border: 1px solid rgba(209, 233, 211, 0.85);
+        box-shadow: 0 22px 52px rgba(41, 100, 42, 0.08);
+      }
+      .hero-card h3 {
+        margin-top: 0;
+        color: var(--primary);
+        font-size: 1.1rem;
+      }
+      .hero-card p {
+        margin: 0.9rem 0 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .section {
+        padding: 4rem 1.5rem;
+        max-width: 1180px;
+        margin: 0 auto;
+        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        position: relative;
+      }
+      .section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 20px;
+        z-index: 1;
+      }
+      .section > * {
+        position: relative;
+        z-index: 2;
+      }
+      .section-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.85rem;
+        margin-bottom: 2rem;
+      }
+      .section-title {
+        margin: 0;
+        color: var(--primary);
+        font-size: clamp(2rem, 2.8vw, 2.4rem);
+      }
+      .section-subtitle {
+        margin: 0;
+        max-width: 760px;
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 1rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.6rem;
+      }
+      .card {
+        background: white;
+        border-radius: 24px;
+        padding: 1.8rem;
+        box-shadow: 0 18px 48px rgba(33, 82, 38, 0.06);
+        border: 1px solid rgba(224, 237, 228, 0.85);
+        transition: transform 0.5s ease, box-shadow 0.5s ease;
+        transform-style: preserve-3d;
+        animation: float 4s ease-in-out infinite;
+      }
+      .card:nth-child(2) { animation-delay: 0.5s; }
+      .card:nth-child(3) { animation-delay: 1s; }
+      .card:nth-child(4) { animation-delay: 1.5s; }
+      @keyframes float {
+        0%, 100% { transform: translateY(0px) rotateY(0deg); }
+        50% { transform: translateY(-10px) rotateY(2deg); }
+      }
+      .card:hover {
+        animation-play-state: paused;
+        transform: rotateY(5deg) translateY(-10px);
+        box-shadow: 0 25px 60px rgba(33, 82, 38, 0.15);
+      }
+      .card h3 {
+        margin-top: 0;
+        color: var(--primary);
+        font-size: 1.15rem;
+      }
+      .card p {
+        color: var(--muted);
+        line-height: 1.75;
+        margin: 0.85rem 0 0;
+      }
+      .icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: 18px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 1rem;
+        background: rgba(46, 125, 50, 0.12);
+        color: var(--primary);
+        font-size: 1.35rem;
+      }
+      .workflow-step {
+        margin-bottom: 1rem;
+        padding: 1rem 1rem 1rem 1.3rem;
+        background: #f6fff6;
+        border-left: 4px solid #81c784;
+        border-radius: 16px;
+        color: var(--muted);
+      }
+      .workflow-step strong {
+        color: #245723;
+        display: inline-block;
+        margin-bottom: 0.25rem;
+      }
+      .future-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 1rem;
+      }
+      .future-list li {
+        background: white;
+        border: 1px solid #e4efe5;
+        border-radius: 20px;
+        padding: 1.3rem 1.4rem;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-start;
+        box-shadow: 0 14px 38px rgba(45, 111, 54, 0.06);
+        color: var(--muted);
+        line-height: 1.7;
+      }
+      .future-list li::before {
+        content: "✓";
+        width: 30px;
+        min-width: 30px;
+        height: 30px;
+        margin-top: 4px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #eaf7e7;
+        color: var(--primary);
+        font-weight: 700;
+      }
+      footer {
+        background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+        color: white;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+      }
+      footer p {
+        margin: 0.35rem 0;
+        color: rgba(255, 255, 255, 0.86);
+      }
+      footer a {
+        color: #c8e6c9;
+        text-decoration: none;
+      }
+      @media (max-width: 980px) {
         .hero-inner {
-            max-width: 1180px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 2.4rem;
-            align-items: center;
-        }
-        .hero-copy p:first-of-type {
-            margin-bottom: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.18em;
-            color: #4c7f56;
-            text-transform: uppercase;
+          grid-template-columns: 1fr;
         }
         .hero-copy h1 {
-            color: var(--primary);
-            font-size: clamp(2.6rem, 5vw, 3.8rem);
-            line-height: 1.02;
-            margin: 0 0 1.25rem;
+          font-size: 3rem;
         }
-        .hero-copy p {
-            font-size: 1.12rem;
-            color: var(--muted);
-            max-width: 640px;
-            margin: 0 0 1.8rem;
-            line-height: 1.8;
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 680px) {
+        .navbar {
+          padding: 1rem;
+        }
+        .hero {
+          padding-top: 3rem;
         }
         .hero-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+          flex-direction: column;
+          align-items: stretch;
         }
         .btn-primary,
         .btn-secondary {
-            border-radius: 999px;
-            padding: 0.95rem 1.9rem;
-            font-size: 1rem;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-            border: none;
-            box-shadow: 0 16px 28px rgba(46, 125, 50, 0.18);
-        }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .btn-secondary {
-            background: white;
-            color: var(--primary-dark);
-            border: 1px solid rgba(46, 125, 50, 0.16);
-        }
-        .btn-secondary:hover { transform: translateY(-2px); }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .stat-chip {
-            background: #f7fff7;
-            border: 1px solid #deefde;
-            border-radius: 18px;
-            padding: 1rem 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            box-shadow: 0 10px 35px rgba(33, 103, 45, 0.06);
-        }
-        .stat-chip .icon {
-            width: 46px;
-            height: 46px;
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            background: rgba(46, 125, 50, 0.12);
-            color: var(--primary);
-            font-size: 1.25rem;
-        }
-        .stat-chip strong {
-            display: block;
-            font-size: 1.25rem;
-            color: #243324;
-        }
-        .hero-visual {
-            display: grid;
-            gap: 1.3rem;
-        }
-        .hero-card {
-            background: white;
-            padding: 1.8rem;
-            border-radius: 28px;
-            border: 1px solid rgba(209, 233, 211, 0.85);
-            box-shadow: 0 22px 52px rgba(41, 100, 42, 0.08);
-        }
-        .hero-card h3 {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-        .hero-card p {
-            margin: 0.9rem 0 0;
-            color: var(--muted);
-            line-height: 1.75;
+          width: 100%;
         }
         .section {
-            padding: 4rem 1.5rem;
-            max-width: 1180px;
-            margin: 0 auto;
+          padding: 3rem 1rem;
         }
-        .section-header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            gap: 0.85rem;
-            margin-bottom: 2rem;
-        }
-        .section-title {
-            margin: 0;
-            color: var(--primary);
-            font-size: clamp(2rem, 2.8vw, 2.4rem);
-        }
-        .section-subtitle {
-            margin: 0;
-            max-width: 760px;
-            color: var(--muted);
-            line-height: 1.75;
-            font-size: 1rem;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.6rem;
-        }
-        .card {
-            background: white;
-            border-radius: 24px;
-            padding: 1.8rem;
-            box-shadow: 0 18px 48px rgba(33, 82, 38, 0.06);
-            border: 1px solid rgba(224, 237, 228, 0.85);
-        }
-        .card h3 {
-            margin-top: 0;
-            color: var(--primary);
-            font-size: 1.15rem;
-        }
-        .card p {
-            color: var(--muted);
-            line-height: 1.75;
-            margin: 0.85rem 0 0;
-        }
-        .icon-badge {
-            width: 52px;
-            height: 52px;
-            border-radius: 18px;
-            display: grid;
-            place-items: center;
-            margin-bottom: 1rem;
-            background: rgba(46, 125, 50, 0.12);
-            color: var(--primary);
-            font-size: 1.35rem;
-        }
-        .workflow-step {
-            margin-bottom: 1rem;
-            padding: 1rem 1rem 1rem 1.3rem;
-            background: #f6fff6;
-            border-left: 4px solid #81c784;
-            border-radius: 16px;
-            color: var(--muted);
-        }
-        .workflow-step strong {
-            color: #245723;
-            display: inline-block;
-            margin-bottom: 0.25rem;
-        }
-        .future-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: grid;
-            gap: 1rem;
-        }
-        .future-list li {
-            background: white;
-            border: 1px solid #e4efe5;
-            border-radius: 20px;
-            padding: 1.3rem 1.4rem;
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            box-shadow: 0 14px 38px rgba(45, 111, 54, 0.06);
-            color: var(--muted);
-            line-height: 1.7;
-        }
-        .future-list li::before {
-            content: '✓';
-            width: 30px;
-            min-width: 30px;
-            height: 30px;
-            margin-top: 4px;
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            background: #eaf7e7;
-            color: var(--primary);
-            font-weight: 700;
-        }
-        footer {
-            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
-            color: white;
-            padding: 2.5rem 1.5rem;
-            text-align: center;
-        }
-        footer p {
-            margin: 0.35rem 0;
-            color: rgba(255, 255, 255, 0.86);
-        }
-        footer a { color: #c8e6c9; text-decoration: none; }
-        @media (max-width: 980px) {
-            .hero-inner { grid-template-columns: 1fr; }
-            .hero-copy h1 { font-size: 3rem; }
-            .stats-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 680px) {
-            .navbar { padding: 1rem; }
-            .hero { padding-top: 3rem; }
-            .hero-buttons { flex-direction: column; align-items: stretch; }
-            .btn-primary, .btn-secondary { width: 100%; }
-            .section { padding: 3rem 1rem; }
-        }
-        .chat-widget-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s;
-        }
-        .chat-widget-btn:hover { transform: scale(1.1); }
-        .chat-window {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 350px;
-            height: 450px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            display: none;
-            flex-direction: column;
-            z-index: 1000;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-        }
-        .chat-header {
-            background-color: var(--primary);
-            color: white;
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .chat-header h3 { margin: 0; font-size: 1.1rem; }
-        .chat-close { background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer; }
-        .chat-body { flex: 1; padding: 15px; overflow-y: auto; background-color: #f9f9f9; }
-        .chat-footer { padding: 10px; border-top: 1px solid #eee; display: flex; gap: 10px; background: white; }
-        .chat-footer input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .chat-footer button { background-color: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
-        .chat-footer { position: relative; }
-        .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 8px; max-width: 80%; word-wrap: break-word; font-size: 0.95rem; }
-        .chat-message.user { background-color: #e8f5e9; color: #1b5e20; align-self: flex-end; margin-left: auto; }
-        .chat-message.bot { background-color: #fff; border: 1px solid #ddd; color: #333; align-self: flex-start; }
-        .autocomplete-suggestions {
-            position: absolute;
-            bottom: 60px;
-            left: 10px;
-            right: 10px;
-            max-height: 150px;
-            overflow-y: auto;
-            background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1001;
-            display: none;
-        }
-        .autocomplete-suggestion-item {
-            padding: 8px 10px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            color: #333;
-            border-bottom: 1px solid #eee;
-        }
-        .autocomplete-suggestion-item:last-child { border-bottom: none; }
-        .autocomplete-suggestion-item:hover { background-color: #f0f0f0; }
-        #loading-indicator {
-            display: none;
-            text-align: center;
-            padding: 10px;
-            font-style: italic;
-            color: #555;
-            background-color: #f0f0f0;
-        }
+      }
+      .chat-widget-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s;
+      }
+      .chat-widget-btn:hover {
+        transform: scale(1.1);
+      }
+      .chat-window {
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        width: 350px;
+        height: 450px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+        overflow: hidden;
+        border: 1px solid #e0e0e0;
+      }
+      .chat-header {
+        background-color: var(--primary);
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .chat-header h3 {
+        margin: 0;
+        font-size: 1.1rem;
+      }
+      .chat-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.2rem;
+        cursor: pointer;
+      }
+      .chat-body {
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background-color: #f9f9f9;
+      }
+      .chat-footer {
+        padding: 10px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
+        background: white;
+      }
+      .chat-footer input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .chat-footer button {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .chat-footer {
+        position: relative;
+      }
+      .chat-message {
+        margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 8px;
+        max-width: 80%;
+        word-wrap: break-word;
+        font-size: 0.95rem;
+      }
+      .chat-message.user {
+        background-color: #e8f5e9;
+        color: #1b5e20;
+        align-self: flex-end;
+        margin-left: auto;
+      }
+      .chat-message.bot {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        color: #333;
+        align-self: flex-start;
+      }
+      .autocomplete-suggestions {
+        position: absolute;
+        bottom: 60px;
+        left: 10px;
+        right: 10px;
+        max-height: 150px;
+        overflow-y: auto;
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        display: none;
+      }
+      .autocomplete-suggestion-item {
+        padding: 8px 10px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: #333;
+        border-bottom: 1px solid #eee;
+      }
+      .autocomplete-suggestion-item:last-child {
+        border-bottom: none;
+      }
+      .autocomplete-suggestion-item:hover {
+        background-color: #f0f0f0;
+      }
+      #loading-indicator {
+        display: none;
+        text-align: center;
+        padding: 10px;
+        font-style: italic;
+        color: #555;
+        background-color: #f0f0f0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navbar -->
     <div class="navbar">
-        <h1 data-i18n="app_name">Krishi Connect</h1>
-        <div class="nav-links">
-            <select id="language-selector" style="padding: 0.45rem 0.7rem; border-radius: 999px; border: none; color: #243324; font-weight: 600;">
-                <option value="en">English</option>
-                <option value="hi">हिंदी</option>
-                <option value="mr">मराठी</option>
-            </select>
-            <a href="/login" data-i18n="login">Login</a>
-            <a href="/signup" data-i18n="signup">Sign Up</a>
-        </div>
+      <h1 data-i18n="app_name">Krishi Connect</h1>
+      <div class="nav-links">
+        <select
+          id="language-selector"
+          style="
+            padding: 0.45rem 0.7rem;
+            border-radius: 999px;
+            border: none;
+            color: #243324;
+            font-weight: 600;
+          "
+        >
+          <option value="en">English</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+        </select>
+        <a href="/login" data-i18n="login">Login</a>
+        <a href="/signup" data-i18n="signup">Sign Up</a>
+      </div>
     </div>
 
     <!-- Hero Section -->
     <div class="hero">
-        <div class="hero-inner">
-            <div class="hero-copy">
-                <p data-i18n="app_name">Krishi Connect</p>
-                <h1 data-i18n="hero_title">Welcome to Krishi Connect</h1>
-                <p data-i18n="hero_desc">Building a transparent, efficient, and profitable agricultural ecosystem. We create a digital bridge between farmers and markets, removing intermediaries.</p>
-                <div class="hero-buttons">
-                    <a href="/signup" class="btn-primary" data-i18n="get_started">Get Started</a>
-                    <a href="/login" class="btn-secondary" data-i18n="login">Login</a>
-                </div>
-                <div class="stats-grid">
-                    <div class="stat-chip">
-                        <span class="icon">🌾</span>
-                        <div>
-                            <strong>3,500+</strong>
-                            Farmers empowered
-                        </div>
-                    </div>
-                    <div class="stat-chip">
-                        <span class="icon">📈</span>
-                        <div>
-                            <strong>12%</strong>
-                            Average price growth
-                        </div>
-                    </div>
-                </div>
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p data-i18n="app_name">Krishi Connect</p>
+          <h1 data-i18n="hero_title">Welcome to Krishi Connect</h1>
+          <p data-i18n="hero_desc">
+            Building a transparent, efficient, and profitable agricultural
+            ecosystem. We create a digital bridge between farmers and markets,
+            removing intermediaries.
+          </p>
+          <div class="hero-buttons">
+            <a href="/signup" class="btn-primary" data-i18n="get_started"
+              >Get Started</a
+            >
+            <a href="/login" class="btn-secondary" data-i18n="login">Login</a>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-chip">
+              <span class="icon">🌾</span>
+              <div>
+                <strong>3,500+</strong>
+                Farmers empowered
+              </div>
             </div>
-            <div class="hero-visual">
-                <div class="hero-card">
-                    <h3>Direct farmer-to-market access</h3>
-                    <p>Sell produce directly, save on intermediaries, and reach more buyers with an easy-to-use dashboard.</p>
-                </div>
-                <div class="hero-card">
-                    <h3>Smart market insights</h3>
-                    <p>Use real-time price updates, crop alerts, and buyer signals to make informed decisions every season.</p>
-                </div>
+            <div class="stat-chip">
+              <span class="icon">📈</span>
+              <div>
+                <strong>12%</strong>
+                Average price growth
+              </div>
             </div>
+          </div>
         </div>
+        <div class="hero-visual">
+          <div class="hero-card">
+            <h3>Direct farmer-to-market access</h3>
+            <p>
+              Sell produce directly, save on intermediaries, and reach more
+              buyers with an easy-to-use dashboard.
+            </p>
+          </div>
+          <div class="hero-card">
+            <h3>Smart market insights</h3>
+            <p>
+              Use real-time price updates, crop alerts, and buyer signals to
+              make informed decisions every season.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Objectives -->
     <div class="section">
-        <div class="section-header">
-            <h2 class="section-title" data-i18n="objectives">Our Objectives</h2>
-            <p class="section-subtitle">We support farmers with digital tools, direct market access, and better pricing through a connected agricultural ecosystem.</p>
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="objectives">Our Objectives</h2>
+        <p class="section-subtitle">
+          We support farmers with digital tools, direct market access, and
+          better pricing through a connected agricultural ecosystem.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="icon-badge">🌱</div>
+          <img src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Farming" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <h3 data-i18n="obj_1_title">Empower Farmers Digitally</h3>
+          <p data-i18n="obj_1_desc">
+            Provide farmers with a platform to sell their product directly to
+            consumers and retailers.
+          </p>
         </div>
-        <div class="grid">
-            <div class="card">
-                <div class="icon-badge">🌱</div>
-                <h3 data-i18n="obj_1_title">Empower Farmers Digitally</h3>
-                <p data-i18n="obj_1_desc">Provide farmers with a platform to sell their product directly to consumers and retailers.</p>
-            </div>
-            <div class="card">
-                <div class="icon-badge">🚚</div>
-                <h3 data-i18n="obj_2_title">Increase Market Reach</h3>
-                <p data-i18n="obj_2_desc">Help farmers reach wider markets across India through online access.</p>
-            </div>
-            <div class="card">
-                <div class="icon-badge">💡</div>
-                <h3 data-i18n="obj_3_title">Promote Digital Literacy</h3>
-                <p data-i18n="obj_3_desc">Encourage rural farmers to adopt digital tools for trading and communication.</p>
-            </div>
-            <div class="card">
-                <div class="icon-badge">📊</div>
-                <h3 data-i18n="obj_4_title">Support Agricultural Growth</h3>
-                <p data-i18n="obj_4_desc">Enable farmers to showcase products, buy agricultural tools, and access real-time market insights.</p>
-            </div>
+        <div class="card">
+          <div class="icon-badge">🚚</div>
+          <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Market Reach" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <h3 data-i18n="obj_2_title">Increase Market Reach</h3>
+          <p data-i18n="obj_2_desc">
+            Help farmers reach wider markets across India through online access.
+          </p>
         </div>
+        <div class="card">
+          <div class="icon-badge">💡</div>
+          <img src="https://images.unsplash.com/photo-1574943320219-553eb213f72d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Digital Literacy" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <h3 data-i18n="obj_3_title">Promote Digital Literacy</h3>
+          <p data-i18n="obj_3_desc">
+            Encourage rural farmers to adopt digital tools for trading and
+            communication.
+          </p>
+        </div>
+        <div class="card">
+          <div class="icon-badge">📊</div>
+          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Agricultural Growth" style="width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin: 10px 0;">
+          <h3 data-i18n="obj_4_title">Support Agricultural Growth</h3>
+          <p data-i18n="obj_4_desc">
+            Enable farmers to showcase products, buy agricultural tools, and
+            access real-time market insights.
+          </p>
+        </div>
+      </div>
     </div>
 
     <!-- Workflow / Block Diagram Description -->
-    <div class="section" style="background: #f6fff6;">
-        <div class="section-header">
-            <h2 class="section-title" data-i18n="how_it_works">How It Works</h2>
-            <p class="section-subtitle">An intuitive workflow for farmers and customers to trade, manage orders, and stay connected.</p>
+    <div class="section" style="background: #f6fff6">
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="how_it_works">How It Works</h2>
+        <p class="section-subtitle">
+          An intuitive workflow for farmers and customers to trade, manage
+          orders, and stay connected.
+        </p>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3 data-i18n="for_farmers">👨‍🌾 For Farmers</h3>
+          <div class="workflow-step">
+            <strong data-i18n="step_register">Register:</strong>
+            <span data-i18n="step_register_desc"
+              >Create profile in E-Farmer's Hut.</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="step_upload">Upload:</strong>
+            <span data-i18n="step_upload_desc"
+              >Add product details and manage inventory.</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="step_orders">Orders:</strong>
+            <span data-i18n="step_orders_desc"
+              >Receive and accept order notifications.</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="step_deliver">Deliver:</strong>
+            <span data-i18n="step_deliver_desc"
+              >Fulfill the order to the customer.</span
+            >
+          </div>
         </div>
-        <div class="grid">
-            <div class="card">
-                <h3 data-i18n="for_farmers">👨‍🌾 For Farmers</h3>
-                <div class="workflow-step"><strong data-i18n="step_register">Register:</strong> <span data-i18n="step_register_desc">Create profile in E-Farmer's Hut.</span></div>
-                <div class="workflow-step"><strong data-i18n="step_upload">Upload:</strong> <span data-i18n="step_upload_desc">Add product details and manage inventory.</span></div>
-                <div class="workflow-step"><strong data-i18n="step_orders">Orders:</strong> <span data-i18n="step_orders_desc">Receive and accept order notifications.</span></div>
-                <div class="workflow-step"><strong data-i18n="step_deliver">Deliver:</strong> <span data-i18n="step_deliver_desc">Fulfill the order to the customer.</span></div>
-            </div>
-            <div class="card">
-                <h3 data-i18n="for_customers">🛒 For Customers</h3>
-                <div class="workflow-step"><strong data-i18n="step_register">Register:</strong> <span data-i18n="cust_step_register_desc">Create a customer profile.</span></div>
-                <div class="workflow-step"><strong data-i18n="cust_step_shop">Shop:</strong> <span data-i18n="cust_step_shop_desc">Browse products, compare, and add to cart.</span></div>
-                <div class="workflow-step"><strong data-i18n="cust_step_pay">Payment:</strong> <span data-i18n="cust_step_pay_desc">Pay Online or Cash on Delivery (COD).</span></div>
-                <div class="workflow-step"><strong data-i18n="cust_step_feedback">Feedback:</strong> <span data-i18n="cust_step_feedback_desc">Rate the delivery and the app.</span></div>
-            </div>
+        <div class="card">
+          <h3 data-i18n="for_customers">🛒 For Customers</h3>
+          <div class="workflow-step">
+            <strong data-i18n="step_register">Register:</strong>
+            <span data-i18n="cust_step_register_desc"
+              >Create a customer profile.</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="cust_step_shop">Shop:</strong>
+            <span data-i18n="cust_step_shop_desc"
+              >Browse products, compare, and add to cart.</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="cust_step_pay">Payment:</strong>
+            <span data-i18n="cust_step_pay_desc"
+              >Pay Online or Cash on Delivery (COD).</span
+            >
+          </div>
+          <div class="workflow-step">
+            <strong data-i18n="cust_step_feedback">Feedback:</strong>
+            <span data-i18n="cust_step_feedback_desc"
+              >Rate the delivery and the app.</span
+            >
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Future Scope -->
     <div class="section">
-        <div class="section-header">
-            <h2 class="section-title" data-i18n="future_scope">Future Scope</h2>
-            <p class="section-subtitle">Planned extensions to strengthen farmer support and technology integration across agriculture.</p>
-        </div>
-        <ul class="future-list">
-            <li>Integration with Government Schemes like e-NAM, PM-KISAN, and AgriStack.</li>
-            <li>AI-based price prediction and demand forecasting.</li>
-            <li>IoT integration for real-time farm monitoring and data analytics.</li>
-            <li>AI based Plant and Crop Disease Diagnosis.</li>
-        </ul>
+      <div class="section-header">
+        <h2 class="section-title" data-i18n="future_scope">Future Scope</h2>
+        <p class="section-subtitle">
+          Planned extensions to strengthen farmer support and technology
+          integration across agriculture.
+        </p>
+      </div>
+      <ul class="future-list">
+        <li>
+          Integration with Government Schemes like e-NAM, PM-KISAN, and
+          AgriStack.
+        </li>
+        <li>AI-based price prediction and demand forecasting.</li>
+        <li>
+          IoT integration for real-time farm monitoring and data analytics.
+        </li>
+        <li>AI based Plant and Crop Disease Diagnosis.</li>
+      </ul>
     </div>
 
     <footer>
-        <p data-i18n="footer_rights">&copy; 2024 Krishi Connect. All rights reserved.</p>
-        <p>References: Ministry of Agriculture and Farmers Welfare, NABARD, Agmarknet</p>
+      <p data-i18n="footer_rights">
+        &copy; 2024 Krishi Connect. All rights reserved.
+      </p>
+      <p>
+        References: Ministry of Agriculture and Farmers Welfare, NABARD,
+        Agmarknet
+      </p>
     </footer>
 
     <!-- Chatbot Widget -->
     <button class="chat-widget-btn" onclick="toggleChat()">💬</button>
     <div class="chat-window" id="chat-window">
-        <div class="chat-header">
-            <h3 data-i18n="chatbot_title">Krishi Assistant</h3>
-            <button class="chat-close" onclick="toggleChat()">×</button>
+      <div class="chat-header">
+        <h3 data-i18n="chatbot_title">Krishi Assistant</h3>
+        <button class="chat-close" onclick="toggleChat()">×</button>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="chat-message bot" data-i18n="chatbot_welcome">
+          Hello! How can I help you with farming today?
         </div>
-        <div class="chat-body" id="chat-body">
-            <div class="chat-message bot" data-i18n="chatbot_welcome">Hello! How can I help you with farming today?</div>
-        </div>
-        <div class="chat-footer">
-            <input type="text" id="chat-input" placeholder="Ask a question..." data-i18n-placeholder="chatbot_placeholder" onkeypress="if(event.key==='Enter') sendChatMessage()">
-            <button onclick="sendChatMessage()" data-i18n="chatbot_send">Send</button>
-            <div id="autocomplete-suggestions" class="autocomplete-suggestions"></div> <!-- Autocomplete suggestions container -->
-            <div id="loading-indicator">Processing...</div>
-        </div>
+      </div>
+      <div class="chat-footer">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Ask a question..."
+          data-i18n-placeholder="chatbot_placeholder"
+          onkeypress="if (event.key === 'Enter') sendChatMessage();"
+        />
+        <button onclick="sendChatMessage()" data-i18n="chatbot_send">
+          Send
+        </button>
+        <div
+          id="autocomplete-suggestions"
+          class="autocomplete-suggestions"
+        ></div>
+        <!-- Autocomplete suggestions container -->
+        <div id="loading-indicator">Processing...</div>
+      </div>
     </div>
 
     <script src="{% static 'translations.js' %}"></script>
-    
+
     <script>
-        // Store all patterns from the backend
-        const allPatterns = JSON.parse('{{ all_patterns|escapejs }}');
-        const chatInput = document.getElementById('chat-input');
-        const suggestionsContainer = document.getElementById('autocomplete-suggestions');
+      // Store all patterns from the backend
+      const allPatterns = JSON.parse("{{ all_patterns|escapejs }}");
+      const chatInput = document.getElementById("chat-input");
+      const suggestionsContainer = document.getElementById(
+        "autocomplete-suggestions",
+      );
 
-        function toggleChat() {
-            const chatWindow = document.getElementById('chat-window');
-            if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
-                chatWindow.style.display = 'flex';
-            } else {
-                chatWindow.style.display = 'none';
-            }
+      function toggleChat() {
+        const chatWindow = document.getElementById("chat-window");
+        if (
+          chatWindow.style.display === "none" ||
+          chatWindow.style.display === ""
+        ) {
+          chatWindow.style.display = "flex";
+        } else {
+          chatWindow.style.display = "none";
+        }
+      }
+
+      function appendUserMessageToChat(message) {
+        const chatBody = document.getElementById("chat-body");
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("chat-message", "user");
+        userMessageDiv.textContent = message;
+        chatBody.appendChild(userMessageDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+      }
+
+      async function sendChatMessage() {
+        const inputField = document.getElementById("chat-input");
+        const message = inputField.value.trim();
+        if (!message) return;
+
+        const chatBody = document.getElementById("chat-body");
+
+        // Append User Message
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("chat-message", "user");
+        userMessageDiv.textContent = message;
+        chatBody.appendChild(userMessageDiv);
+
+        // Clear input and hide suggestions after sending
+        inputField.value = "";
+        suggestionsContainer.style.display = "none"; // Ensure suggestions are hidden after sending
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // Show loading indicator
+        document.getElementById("loading-indicator").style.display = "block";
+
+        try {
+          const response = await fetch("/chatbot/message/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: message }),
+          });
+
+          const data = await response.json();
+
+          // Append Bot Message
+          const botMessageDiv = document.createElement("div");
+          botMessageDiv.classList.add("chat-message", "bot");
+          botMessageDiv.textContent =
+            data.response || "Sorry, I couldn't process that.";
+          chatBody.appendChild(botMessageDiv);
+
+          chatBody.scrollTop = chatBody.scrollHeight;
+        } catch (error) {
+          console.error("Error:", error);
+          const botMessageDiv = document.createElement("div");
+          botMessageDiv.classList.add("chat-message", "bot");
+          botMessageDiv.textContent = "Error connecting to server.";
+          chatBody.appendChild(botMessageDiv);
+        } finally {
+          document.getElementById("loading-indicator").style.display = "none";
+        }
+      }
+
+      // Autocomplete logic
+      chatInput.addEventListener("input", function () {
+        const inputText = this.value.toLowerCase();
+        suggestionsContainer.innerHTML = ""; // Clear previous suggestions
+
+        if (inputText.length === 0) {
+          suggestionsContainer.style.display = "none";
+          return;
         }
 
-        function appendUserMessageToChat(message) {
-            const chatBody = document.getElementById('chat-body');
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.classList.add('chat-message', 'user');
-            userMessageDiv.textContent = message;
-            chatBody.appendChild(userMessageDiv);
-            chatBody.scrollTop = chatBody.scrollHeight;
+        const filteredSuggestions = allPatterns.filter((pattern) =>
+          pattern.toLowerCase().includes(inputText),
+        );
+
+        if (filteredSuggestions.length > 0) {
+          filteredSuggestions.forEach((suggestion) => {
+            const suggestionItem = document.createElement("div");
+            suggestionItem.classList.add("autocomplete-suggestion-item");
+            suggestionItem.textContent = suggestion;
+            suggestionItem.addEventListener("click", function () {
+              chatInput.value = suggestion;
+              suggestionsContainer.style.display = "none";
+              sendChatMessage(); // Automatically send the message when a suggestion is clicked
+            });
+            suggestionsContainer.appendChild(suggestionItem);
+          });
+          suggestionsContainer.style.display = "block";
+        } else {
+          suggestionsContainer.style.display = "none";
         }
+      });
 
-        async function sendChatMessage() {
-            const inputField = document.getElementById('chat-input');
-            const message = inputField.value.trim();
-            if (!message) return;
-
-            const chatBody = document.getElementById('chat-body');
-
-            // Append User Message
-            const userMessageDiv = document.createElement('div');
-            userMessageDiv.classList.add('chat-message', 'user');
-            userMessageDiv.textContent = message;
-            chatBody.appendChild(userMessageDiv);
-
-            // Clear input and hide suggestions after sending
-            inputField.value = '';
-            suggestionsContainer.style.display = 'none'; // Ensure suggestions are hidden after sending
-            chatBody.scrollTop = chatBody.scrollHeight;
-
-            // Show loading indicator
-            document.getElementById('loading-indicator').style.display = 'block';
-
-            try {
-                const response = await fetch('/chatbot/message/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ message: message })
-                });
-
-                const data = await response.json();
-                
-                // Append Bot Message
-                const botMessageDiv = document.createElement('div');
-                botMessageDiv.classList.add('chat-message', 'bot');
-                botMessageDiv.textContent = data.response || "Sorry, I couldn't process that.";
-                chatBody.appendChild(botMessageDiv);
-                
-                chatBody.scrollTop = chatBody.scrollHeight;
-
-            } catch (error) {
-                console.error('Error:', error);
-                const botMessageDiv = document.createElement('div');
-                botMessageDiv.classList.add('chat-message', 'bot');
-                botMessageDiv.textContent = "Error connecting to server.";
-                chatBody.appendChild(botMessageDiv);
-            } finally {
-                document.getElementById('loading-indicator').style.display = 'none';
-            }
+      document.addEventListener("click", function (event) {
+        if (
+          !chatInput.contains(event.target) &&
+          !suggestionsContainer.contains(event.target)
+        ) {
+          suggestionsContainer.style.display = "none";
         }
+      });
 
-        // Autocomplete logic
-        chatInput.addEventListener('input', function() {
-            const inputText = this.value.toLowerCase();
-            suggestionsContainer.innerHTML = ''; // Clear previous suggestions
-
-            if (inputText.length === 0) {
-                suggestionsContainer.style.display = 'none';
-                return;
-            }
-
-            const filteredSuggestions = allPatterns.filter(pattern => 
-                pattern.toLowerCase().includes(inputText)
-            );
-
-            if (filteredSuggestions.length > 0) {
-                filteredSuggestions.forEach(suggestion => {
-                    const suggestionItem = document.createElement('div');
-                    suggestionItem.classList.add('autocomplete-suggestion-item');
-                    suggestionItem.textContent = suggestion;
-                    suggestionItem.addEventListener('click', function() {
-                        chatInput.value = suggestion;
-                        suggestionsContainer.style.display = 'none';
-                        sendChatMessage(); // Automatically send the message when a suggestion is clicked
-                    });
-                    suggestionsContainer.appendChild(suggestionItem);
-                });
-                suggestionsContainer.style.display = 'block';
-            } else {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-
-        document.addEventListener('click', function(event) {
-            if (!chatInput.contains(event.target) && !suggestionsContainer.contains(event.target)) {
-                suggestionsContainer.style.display = 'none';
-            }
-        });
-
-        // Initial call to hide suggestions if for some reason they are visible on load
-        suggestionsContainer.style.display = 'none';
+      // Initial call to hide suggestions if for some reason they are visible on load
+      suggestionsContainer.style.display = "none";
     </script>
-</body>
+  </body>
 </html>
