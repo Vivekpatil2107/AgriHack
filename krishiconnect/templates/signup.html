@@ -5,11 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up - Krishi Connect</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <style>
+        :root {
+            --primary: #2E7D32;
+            --secondary: #81C784;
+            --light: #E8F5E8;
+            --dark: #1B5E20;
+        }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e9f5e9;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--light), var(--secondary)), url('https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,58 +27,94 @@
             margin: 0;
         }
         .signup-container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
+            backdrop-filter: blur(10px);
         }
         h2 {
             text-align: center;
-            color: #2e7d32;
-            margin-bottom: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            font-weight: 600;
+        }
+        h2 i {
+            margin-right: 10px;
         }
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
         }
         label {
             display: block;
             margin-bottom: 0.5rem;
             color: #555;
+            font-weight: 500;
         }
-        input[type="text"], input[type="email"], input[type="password"] {
+        input[type="text"], input[type="email"], input[type="password"], select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="password"]:focus, select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+            outline: none;
+        }
+        .form-group i {
+            position: absolute;
+            left: 15px;
+            top: 42px;
+            color: #aaa;
         }
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #2e7d32;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--dark));
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
             margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         button:hover {
-            background-color: #1b5e20;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
         }
         .footer-text {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 14px;
+            color: #666;
         }
         .footer-text a {
-            color: #2e7d32;
+            color: var(--primary);
             text-decoration: none;
+            font-weight: 500;
         }
         .footer-text a:hover {
             text-decoration: underline;
+        }
+        .alert {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -81,12 +127,12 @@
                 <option value="mr">मराठी</option>
             </select>
         </div>
-        <h2 data-i18n="create_account">Create Account</h2>
+        <h2><i class="fas fa-seedling"></i> Create Account</h2>
 
         
             
         {% for message in messages %}
-            <div style="color: red; text-align: center; margin-bottom: 10px;">{{ message }}</div>
+            <div class="alert alert-danger">{{ message }}</div>
         {% endfor %}
         
 
@@ -94,8 +140,9 @@
             {% csrf_token %}
             
             <div class="form-group">
-                <label for="fullname" data-i18n="full_name">Full Name</label>
-                <input type="text" id="fullname" name="username" placeholder="Enter your full name" data-i18n-placeholder="fullname_placeholder" required>
+                <label for="fullname">Full Name</label>
+                <i class="fas fa-user"></i>
+                <input type="text" id="fullname" name="username" placeholder="Enter your full name" required>
             </div>
             <div class="form-group">
                 <label data-i18n="register_as">Register as</label>
@@ -109,21 +156,25 @@
                 </div>
             </div>
             <div class="form-group">
-                <label for="email" data-i18n="email_label">Email Address</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" data-i18n-placeholder="email_placeholder" required>
+                <label for="email">Email Address</label>
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 <small id="email-error" style="color: red; display: none;">Invalid email format</small>
             </div>
             <div class="form-group">
-                <label for="phone" data-i18n="phone_label">Phone Number</label>
+                <label for="phone">Phone Number</label>
+                <i class="fas fa-phone"></i>
                 <input type="text" id="phone" name="phone" placeholder="Enter phone (e.g. +91...)" required>
             </div>
             <div class="form-group">
-                <label for="password" data-i18n="password_label">Password</label>
-                <input type="password" id="password" name="password" placeholder="Create a password" data-i18n-placeholder="create_password_placeholder" required>
+                <label for="password">Password</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" name="password" placeholder="Create a password" required>
             </div>
             <div class="form-group">
-                <label for="confirm-password" data-i18n="confirm_password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" data-i18n-placeholder="confirm_password_placeholder" required>
+                <label for="confirm-password">Confirm Password</label>
+                <i class="fas fa-lock"></i>
+                <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm your password" required>
                 <small id="password-error" style="color: red; display: none;">Passwords do not match</small>
             </div>
             <div class="form-group" style="display: flex; align-items: center;">
