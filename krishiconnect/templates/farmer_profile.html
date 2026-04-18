@@ -1,311 +1,492 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmer Profile - {{ farmer_user.get_full_name|default:farmer_user.username }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      Farmer Profile - {{ farmer_user.get_full_name|default:farmer_user.username
+      }}
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #e9f5e9;
-            margin: 0;
-        }
-        .navbar {
-            background-color: #2e7d32;
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .navbar h1 { margin: 0; font-size: 24px; }
-        .navbar a.logout-btn {
-            background-color: white;
-            color: #2e7d32;
-            padding: 8px 16px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        .navbar a.logout-btn:hover { background-color: #f1f1f1; }
-        .user-info { display: flex; align-items: center; gap: 20px; }
-        .profile-container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 2rem;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 20px;
-            margin-bottom: 20px;
-        }
-        .profile-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #2e7d32;
-        }
-        .profile-info h2 {
-            margin: 0;
-            color: #2e7d32;
-        }
-        .profile-info p {
-            margin: 5px 0 0;
-            color: #666;
-            font-size: 1rem;
-        }
-        .categories-section h3 {
-            color: #2e7d32;
-            margin-bottom: 15px;
-        }
-        .category-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            list-style: none;
-            padding: 0;
-        }
-        .category-item {
-            background-color: #f1f8e9;
-            color: #33691e;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #2e7d32;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        .add-to-cart-btn {
-            margin-top: 10px;
-            width: 100%;
-            background: #2e7d32;
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .add-to-cart-btn:hover { background: #1b5e20; }
-        .follow-btn {
-            background-color: #2e7d32;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            margin-left: auto;
-        }
-        .follow-btn.following {
-            background-color: #fff;
-            color: #2e7d32;
-            border: 2px solid #2e7d32;
-        }
-        .follow-btn:hover { opacity: 0.9; }
-        
-        /* Product Grid Reuse */
-        .products-section { margin-top: 30px; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .product-img { height: 140px; background: #f1f8e9; display: flex; align-items: center; justify-content: center; font-size: 3rem; overflow: hidden; }
-        .product-img img { width: 100%; height: 100%; object-fit: cover; }
-        .product-details { padding: 12px; }
-        .product-title { font-weight: bold; margin-bottom: 5px; font-size: 1rem; color: #333; }
-        .product-price { color: #2e7d32; font-weight: bold; margin-bottom: 5px; }
-        .no-products { text-align: center; color: #777; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #e9f5e9;
+        margin: 0;
+      }
+      .navbar {
+        background-color: #2e7d32;
+        color: white;
+        padding: 1rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .navbar h1 {
+        margin: 0;
+        font-size: 24px;
+      }
+      .navbar a.logout-btn {
+        background-color: white;
+        color: #2e7d32;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+      }
+      .navbar a.logout-btn:hover {
+        background-color: #f1f1f1;
+      }
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .profile-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+      }
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #2e7d32;
+      }
+      .profile-info h2 {
+        margin: 0;
+        color: #2e7d32;
+      }
+      .profile-info p {
+        margin: 5px 0 0;
+        color: #666;
+        font-size: 1rem;
+      }
+      .categories-section h3 {
+        color: #2e7d32;
+        margin-bottom: 15px;
+      }
+      .category-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        list-style: none;
+        padding: 0;
+      }
+      .category-item {
+        background-color: #f1f8e9;
+        color: #33691e;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+      .back-link {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #2e7d32;
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+      .add-to-cart-btn {
+        margin-top: 10px;
+        width: 100%;
+        background: #2e7d32;
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .add-to-cart-btn:hover {
+        background: #1b5e20;
+      }
+      .follow-btn {
+        background-color: #2e7d32;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s;
+        margin-left: auto;
+      }
+      .follow-btn.following {
+        background-color: #fff;
+        color: #2e7d32;
+        border: 2px solid #2e7d32;
+      }
+      .follow-btn:hover {
+        opacity: 0.9;
+      }
+
+      /* Product Grid Reuse */
+      .products-section {
+        margin-top: 30px;
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+      .product-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border: 1px solid #eee;
+      }
+      .product-img {
+        height: 140px;
+        background: #f1f8e9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        overflow: hidden;
+      }
+      .product-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .product-details {
+        padding: 12px;
+      }
+      .product-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 1rem;
+        color: #333;
+      }
+      .product-price {
+        color: #2e7d32;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      .no-products {
+        text-align: center;
+        color: #777;
+        padding: 20px;
+        background: #f9f9f9;
+        border-radius: 8px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="navbar">
-        <h1><a href="{% url 'consumer:consumer_dashboard' %}" style="color: white; text-decoration: none;"><span data-i18n="app_name">Krishi Connect</span></a></h1>
-        <div class="user-info">
-            <a href="{% url 'consumer:consumer_dashboard' %}" class="logout-btn" style="background: none; color: white;">🛒 Cart (<span id="cart-count">0</span>)</a>
-            <span><span data-i18n="welcome">Welcome,</span> <strong>{{ user.get_full_name|default:user.username }}</strong></span>
-            <a href="{% url 'logout' %}" class="logout-btn" data-i18n="logout">Logout</a>
-        </div>
+      <h1>
+        <a
+          href="{% url 'consumer:consumer_dashboard' %}"
+          style="color: white; text-decoration: none"
+          ><span data-i18n="app_name">Krishi Connect</span></a
+        >
+      </h1>
+      <div class="user-info">
+        <a
+          href="{% url 'consumer:consumer_dashboard' %}"
+          class="logout-btn"
+          style="background: none; color: white"
+          >🛒 Cart (<span id="cart-count">0</span>)</a
+        >
+        <span
+          ><span data-i18n="welcome">Welcome,</span>
+          <strong>{{ user.get_full_name|default:user.username }}</strong></span
+        >
+        <a href="{% url 'logout' %}" class="logout-btn" data-i18n="logout"
+          >Logout</a
+        >
+      </div>
     </div>
 
     <div class="profile-container">
-        <a href="{% url 'consumer:consumer_dashboard' %}" class="back-link">&larr; Back to Shopping</a>
-        <div class="profile-header">
-            {% if farmer_user.userprofile.image %}
-                <img src="{{ farmer_user.userprofile.image.url }}" alt="{{ farmer_user.get_full_name }}" class="profile-image">
-            {% else %}
-                <div style="width: 100px; height: 100px; border-radius: 50%; background: #2e7d32; color: white; display: flex; align-items: center; justify-content: center; font-size: 3rem; flex-shrink: 0;">
-                    {{ farmer_user.get_full_name|default:farmer_user.username|first|upper }}
-                </div>
-            {% endif %}
-            <div class="profile-info">
-                <h2>{{ farmer_user.get_full_name|default:farmer_user.username }}</h2>
-                <p><i class="fas fa-map-marker-alt"></i> {{ farmer_user.userprofile.city }}</p>
-                <p>Member Since: {{ farmer_user.date_joined|date:"M Y" }}</p>
-                <div style="margin-top: 8px; display: flex; align-items: center; gap: 5px;">
-                    <span style="background-color: #2e7d32; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.9rem; font-weight: bold;">
-                        {{ avg_rating }} <i class="fas fa-star" style="font-size: 0.8rem;"></i>
-                    </span>
-                    <span style="color: #666; font-size: 0.9rem;">({{ review_count }} Ratings)</span>
-                    <span style="color: #666; font-size: 0.9rem; margin-left: 10px;">• <span id="followerCount">{{ follower_count }}</span> Followers</span>
-                </div>
+      <a href="{% url 'consumer:consumer_dashboard' %}" class="back-link"
+        >&larr; Back to Shopping</a
+      >
+      <div class="profile-header">
+        {% if farmer_user.userprofile.image %}
+        <img
+          src="{{ farmer_user.userprofile.image.url }}"
+          alt="{{ farmer_user.get_full_name }}"
+          class="profile-image"
+        />
+        {% else %}
+        <div
+          style="
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #2e7d32;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            flex-shrink: 0;
+          "
+        >
+          {{ farmer_user.get_full_name|default:farmer_user.username|first|upper
+          }}
+        </div>
+        {% endif %}
+        <div class="profile-info">
+          <h2>{{ farmer_user.get_full_name|default:farmer_user.username }}</h2>
+          <p>
+            <i class="fas fa-map-marker-alt"></i> {{
+            farmer_user.userprofile.city }}
+          </p>
+          <p>Member Since: {{ farmer_user.date_joined|date:"M Y" }}</p>
+          <div
+            style="
+              margin-top: 8px;
+              display: flex;
+              align-items: center;
+              gap: 5px;
+            "
+          >
+            <span
+              style="
+                background-color: #2e7d32;
+                color: white;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 0.9rem;
+                font-weight: bold;
+              "
+            >
+              {{ avg_rating }}
+              <i class="fas fa-star" style="font-size: 0.8rem"></i>
+            </span>
+            <span style="color: #666; font-size: 0.9rem"
+              >({{ review_count }} Ratings)</span
+            >
+            <span style="color: #666; font-size: 0.9rem; margin-left: 10px"
+              >•
+              <span id="followerCount">{{ follower_count }}</span>
+              Followers</span
+            >
+          </div>
+        </div>
+        <button
+          id="followBtn"
+          class="follow-btn {% if is_following %}following{% endif %}"
+          onclick="toggleFollow({{ farmer_user.id }})"
+        >
+          {% if is_following %}Following{% else %}Follow Farmer{% endif %}
+        </button>
+      </div>
+
+      <div class="categories-section">
+        <h3>Sells Products In Categories:</h3>
+        {% if categories %}
+        <ul class="category-list">
+          {% for category in categories %}
+          <li class="category-item">{{ category }}</li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p>This farmer has not listed any products yet.</p>
+        {% endif %}
+      </div>
+
+      <div class="products-section">
+        <h3 data-i18n="products_by_farmer">Products by this Farmer</h3>
+        {% if products %}
+        <div class="product-grid">
+          {% for product in products %}
+          <div class="product-card">
+            <div class="product-img">
+              {% if product.image %}
+              <img src="{{ product.image.url }}" alt="{{ product.name }}" />
+              {% else %}
+              <img
+                src="https://images.unsplash.com/photo-1500651230702-0e2d8a49d4ad?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80"
+                alt="Default product image"
+              />
+              {% endif %}
             </div>
-            <button id="followBtn" class="follow-btn {% if is_following %}following{% endif %}" onclick="toggleFollow({{ farmer_user.id }})">
-                {% if is_following %}Following{% else %}Follow Farmer{% endif %}
-            </button>
+            <div class="product-details">
+              <div class="product-title">{{ product.name }}</div>
+              <div class="product-price" style="margin-bottom: 5px">
+                ₹{{ product.price }} / kg
+              </div>
+              <div
+                style="
+                  font-size: 0.85rem;
+                  color: #666;
+                  margin-bottom: 10px;
+                  min-height: 36px;
+                "
+              >
+                {{ product.description|truncatechars:50 }}
+              </div>
+              {% if product.stock > 0 %}
+              <p
+                style="
+                  font-size: 0.85rem;
+                  color: #2e7d32;
+                  margin: 0 0 10px 0;
+                  font-weight: 500;
+                "
+              >
+                ✓ In Stock: {{ product.stock }} kg
+              </p>
+              <button
+                class="add-to-cart-btn"
+                onclick="addToCart({{ product.id }})"
+              >
+                Add to Cart
+              </button>
+              {% else %}
+              <div
+                style="
+                  padding: 8px 12px;
+                  font-size: 0.9rem;
+                  text-align: center;
+                  margin-bottom: 10px;
+                  background-color: #ffebee;
+                  color: #d32f2f;
+                  border: 1px solid #ffcdd2;
+                  border-radius: 4px;
+                  font-weight: 600;
+                "
+              >
+                🚫 Out of Stock
+              </div>
+              <button
+                class="add-to-cart-btn"
+                disabled
+                style="background-color: #e0e0e0; cursor: not-allowed"
+              >
+                Add to Cart
+              </button>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
         </div>
-
-        <div class="categories-section">
-            <h3>Sells Products In Categories:</h3>
-            {% if categories %}
-                <ul class="category-list">
-                    {% for category in categories %}
-                        <li class="category-item">{{ category }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>This farmer has not listed any products yet.</p>
-            {% endif %}
-        </div>
-
-        <div class="products-section">
-            <h3 data-i18n="products_by_farmer">Products by this Farmer</h3>
-            {% if products %}
-                <div class="product-grid">
-                    {% for product in products %}
-                    <div class="product-card">
-                        <div class="product-img">
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                            {% else %}
-                                🌾
-                            {% endif %}
-                        </div>
-                        <div class="product-details">
-                            <div class="product-title">{{ product.name }}</div>
-                            <div class="product-price" style="margin-bottom: 5px;">₹{{ product.price }} / kg</div>
-                            <div style="font-size: 0.85rem; color: #666; margin-bottom: 10px; min-height: 36px;">{{ product.description|truncatechars:50 }}</div>
-                            {% if product.stock > 0 %}
-                                <p style="font-size: 0.85rem; color: #2e7d32; margin: 0 0 10px 0; font-weight: 500;">✓ In Stock: {{ product.stock }} kg</p>
-                                <button class="add-to-cart-btn" onclick="addToCart({{ product.id }})">Add to Cart</button>
-                            {% else %}
-                                <div style="padding: 8px 12px; font-size: 0.9rem; text-align: center; margin-bottom: 10px; background-color: #ffebee; color: #d32f2f; border: 1px solid #ffcdd2; border-radius: 4px; font-weight: 600;">
-                                    🚫 Out of Stock
-                                </div>
-                                <button class="add-to-cart-btn" disabled style="background-color: #e0e0e0; cursor: not-allowed;">Add to Cart</button>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="no-products">No products available at the moment.</div>
-            {% endif %}
-        </div>
+        {% else %}
+        <div class="no-products">No products available at the moment.</div>
+        {% endif %}
+      </div>
     </div>
     <script src="{% static 'translations.js' %}"></script>
     <script>
-        function getCsrfToken() {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.startsWith('csrftoken=')) {
-                    return decodeURIComponent(cookie.substring('csrftoken='.length));
-                }
+      function getCsrfToken() {
+        const cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith("csrftoken=")) {
+            return decodeURIComponent(cookie.substring("csrftoken=".length));
+          }
+        }
+        return "{{ csrf_token }}"; // Fallback
+      }
+
+      function toggleFollow(farmerId) {
+        const csrftoken = getCsrfToken();
+        let url = "{% url 'consumer:toggle_follow_farmer' 999999 %}".replace(
+          "999999",
+          farmerId,
+        );
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === "success") {
+              const btn = document.getElementById("followBtn");
+              if (data.is_following) {
+                btn.classList.add("following");
+                btn.innerText = "Following";
+              } else {
+                btn.classList.remove("following");
+                btn.innerText = "Follow Farmer";
+              }
+              const followerCountEl = document.getElementById("followerCount");
+              if (followerCountEl && data.follower_count !== undefined) {
+                followerCountEl.innerText = data.follower_count;
+              }
+            } else {
+              alert("Error: " + data.message);
             }
-            return '{{ csrf_token }}'; // Fallback
-        }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Something went wrong. Please try again.");
+          });
+      }
 
-        function toggleFollow(farmerId) {
-            const csrftoken = getCsrfToken();
-            let url = "{% url 'consumer:toggle_follow_farmer' 999999 %}".replace('999999', farmerId);
-            
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    const btn = document.getElementById('followBtn');
-                    if (data.is_following) {
-                        btn.classList.add('following');
-                        btn.innerText = 'Following';
-                    } else {
-                        btn.classList.remove('following');
-                        btn.innerText = 'Follow Farmer';
-                    }
-                    const followerCountEl = document.getElementById('followerCount');
-                    if (followerCountEl && data.follower_count !== undefined) {
-                        followerCountEl.innerText = data.follower_count;
-                    }
-                } else {
-                    alert('Error: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Something went wrong. Please try again.');
-            });
-        }
+      function addToCart(productId) {
+        const csrftoken = getCsrfToken();
+        let url = "{% url 'consumer:add_to_cart' 999999 %}".replace(
+          "999999",
+          productId,
+        );
 
-        function addToCart(productId) {
-            const csrftoken = getCsrfToken();
-            let url = "{% url 'consumer:add_to_cart' 999999 %}".replace('999999', productId);
-            
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrftoken,
-                    'Content-Type': 'application/json'
-                },
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message);
-                if (data.status === 'success') {
-                    updateCartCount();
-                }
-            });
-        }
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "X-CSRFToken": csrftoken,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            alert(data.message);
+            if (data.status === "success") {
+              updateCartCount();
+            }
+          });
+      }
 
-        function updateCartCount() {
-            fetch("{% url 'consumer:get_cart' %}")
-            .then(response => response.json())
-            .then(data => {
-                const totalItems = data.items.reduce((sum, item) => sum + item.quantity, 0);
-                const cartCountEl = document.getElementById('cart-count');
-                if (cartCountEl) {
-                    cartCountEl.innerText = totalItems;
-                }
-            });
-        }
+      function updateCartCount() {
+        fetch("{% url 'consumer:get_cart' %}")
+          .then((response) => response.json())
+          .then((data) => {
+            const totalItems = data.items.reduce(
+              (sum, item) => sum + item.quantity,
+              0,
+            );
+            const cartCountEl = document.getElementById("cart-count");
+            if (cartCountEl) {
+              cartCountEl.innerText = totalItems;
+            }
+          });
+      }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
-        });
+      document.addEventListener("DOMContentLoaded", function () {
+        updateCartCount();
+      });
     </script>
-</body>
+  </body>
 </html>
